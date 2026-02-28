@@ -176,7 +176,7 @@ Change the color values to customize your site's appearance.
 
 ---
 
-## � Support This Project
+## 💝 Support This Project
 
 If you find this website template useful, consider supporting my work:
 
@@ -187,7 +187,7 @@ Your support helps me create more content and maintain this website!
 
 ---
 
-## �📞 Contact & Author
+## 📞 Contact & Author
 
 **Chirui Huang**  
 📧 Fredykraft7@gmail.com  
