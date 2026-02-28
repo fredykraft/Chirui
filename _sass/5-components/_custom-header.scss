@@ -1,0 +1,30 @@
+/* Custom header/menu button styles - Outline variant */
+.c-header.c-header--custom, .c-header {
+  .c-header__box { align-items: center; }
+
+  .c-nav__list .c-nav__item a{
+    padding:6px 12px;
+    border-radius:8px;
+    border:2px solid rgba($primary-color, 0.16);
+    background: transparent;
+    color: $primary-color;
+    font-weight: 700;
+    transition: background .12s, color .12s, box-shadow .12s;
+  }
+
+  .c-nav__list .c-nav__item a:hover{
+    background: rgba($primary-color, 0.06);
+    color: darken($primary-color, 6%);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  }
+
+  .c-nav__item.is-active a{
+    background: rgba($primary-color, 0.12);
+    color: darken($primary-color, 8%);
+    box-shadow: inset 0 -3px 0 rgba(0,0,0,0.04);
+  }
+
+  @media (max-width: 900px){
+    .c-nav__list .c-nav__item a{ display:block; margin:6px 0; }
+  }
+}

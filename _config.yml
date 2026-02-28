@@ -1,0 +1,46 @@
+title: Chirui Huang
+description: Personal website of Chirui Huang
+baseurl: "/cheerie" # the subpath of your site, e.g. /blog
+url: "https://cheeriehxy.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+
+# Author
+author-name:    Chirui Huang
+# author-image:   1.jpg  # Uncomment and add your profile photo when ready
+author-job:     Researcher
+author-email:   Fredykraft7@gmail.com
+about-author:   Welcome to my personal website.
+
+# Social settings (add your handles here)
+social-twitter:
+social-facebook:
+social-github:
+social-pinterest:
+social-instagram: cheerie.huang
+social-youtube: FredyKraft
+social-vk:
+social-linkedin: chirui-h-595ba6270
+
+# Google Analytics
+google-analytics: # Add your identifier. For example UA-99631805-1
+
+# Build settings
+markdown: kramdown
+permalink: /:page/
+plugins:
+  - jekyll-paginate
+
+paginate: 7
+paginate_path: "/page/:num/"
+
+include:
+  - _pages
+
+sass:
+  sass_dir: _sass
+  style: compressed
+
+# Exclude from processing.
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor

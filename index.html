@@ -1,0 +1,225 @@
+---
+layout: default
+title: "Chirui Huang"
+---
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    width: 100%;
+    overflow-x: hidden;
+  }
+  
+  /* Mobile-first responsive design */
+  @media (max-width: 1024px) {
+    div[style*="max-width: 1000px"] {
+      max-width: 100% !important;
+    }
+    
+    div[style*="max-width: 900px"] {
+      max-width: 100% !important;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    h1 { font-size: 36px !important; }
+    h2 { font-size: 24px !important; }
+    h3 { font-size: 18px !important; }
+    p { font-size: 16px !important; }
+    
+    div[style*="padding: 60px 20px"] {
+      padding: 40px 15px !important;
+    }
+    
+    div[style*="padding: 30px"] {
+      padding: 20px !important;
+    }
+    
+    div[style*="gap: 30px"] {
+      gap: 15px !important;
+      flex-direction: column !important;
+    }
+    
+    div[style*="flex: 1"] {
+      min-width: 100% !important;
+      flex: none !important;
+      width: 100% !important;
+    }
+    
+    a[style*="padding: 15px 30px"] {
+      padding: 12px 25px !important;
+      font-size: 14px !important;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    h1 { font-size: 28px !important; }
+    h2 { font-size: 20px !important; }
+    h3 { font-size: 16px !important; }
+    p { font-size: 14px !important; }
+    
+    div[style*="padding: 60px 20px"] {
+      padding: 30px 10px !important;
+    }
+    
+    div[style*="padding: 30px"] {
+      padding: 15px !important;
+    }
+    
+    div[style*="padding: 25px"] {
+      padding: 15px !important;
+    }
+    
+    div[style*="gap: 30px"] {
+      gap: 10px !important;
+      flex-direction: column !important;
+    }
+    
+    div[style*="gap: 20px"] {
+      gap: 10px !important;
+      flex-direction: column !important;
+    }
+    
+    div[style*="gap: 25px"] {
+      gap: 10px !important;
+      flex-direction: column !important;
+    }
+    
+    a[style*="padding: 15px 30px"] {
+      padding: 10px 20px !important;
+      font-size: 12px !important;
+      width: 100%;
+    }
+    
+    div[style*="max-width: 350px"] {
+      max-width: 280px !important;
+    }
+  }
+  
+  /* Responsive images */
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block !important;
+  }
+  
+  /* Responsive flex containers */
+  div[style*="display: flex"] {
+    flex-wrap: wrap !important;
+  }
+  
+  /* Ensure full width on mobile */
+  @media (max-width: 768px) {
+    div[style*="width: 100%"] {
+      width: 100% !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+  }
+</style>
+
+<div style="width: 100%; text-align: center; padding: 60px 20px; box-sizing: border-box;">
+  <div style="max-width: 1200px; margin: 0 auto;">
+    <div style="text-align: center; margin-bottom: 20px;">
+      <i data-feather="wave" style="width: 60px; height: 60px; color: #556B2F; display: inline-block; margin-bottom: 10px;"></i>
+      <h1 style="font-size: 48px; margin: 0; color: #556B2F;">Welcome!</h1>
+    </div>
+    <p style="font-size: 24px; font-weight: 500; margin-bottom: 10px; color: #333; text-align: center;">I'm Chirui Huang</p>
+    <p style="font-size: 20px; color: #757575; margin-bottom: 40px; text-align: center;">Researcher | Content Creator | Problem Solver</p>
+    
+    <div style="margin: 0 auto; margin-bottom: 60px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 30px; background: #f5f5f5; padding: 30px; border-radius: 10px; border-left: 4px solid #556B2F; max-width: 1000px;">
+      <!-- Photo on the left -->
+      <div style="flex: 1; min-width: 200px; text-align: center; width: 100%;">
+        <img src="{{ site.baseurl }}/image/photo in green dress.jpg" alt="Chirui Huang" style="width: 100%; max-width: 350px; height: auto; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+      </div>
+      
+      <!-- Introduction on the right -->
+      <div style="flex: 1; min-width: 200px; text-align: left; width: 100%;">
+        <p style="font-size: 18px; line-height: 1.8; color: #555; margin: 0;">
+          Welcome to my personal website! I'm passionate about conducting research, creating engaging content, 
+          and solving complex problems. Here you'll find my latest work including research papers, podcast episodes, 
+          educational videos, and useful tools. I believe in sharing knowledge and making an impact through various mediums.
+        </p>
+      </div>
+    </div>
+
+    <!-- Latest Updates Section -->
+    <div style="max-width: 900px; margin: 0 auto; margin-bottom: 60px;">
+      <h2 style="margin-bottom: 30px; color: #333; text-align: center;"><i data-feather="bell" style="width: 40px; height: 40px; color: #556B2F; margin-right: 15px; vertical-align: middle; display: inline-block;"></i>Latest Updates</h2>
+    <div style="text-align: left; background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 25px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+      <div style="display: flex; align-items: center; margin-bottom: 10px;">
+        <span style="background: #556B2F; color: white; padding: 5px 12px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-right: 10px;">NEW</span>
+        <span style="color: #999; font-size: 14px;">February 2026</span>
+      </div>
+      <h3 style="margin-bottom: 10px; color: #333;"><i data-feather="star" style="width: 28px; height: 28px; color: #556B2F; margin-right: 10px; vertical-align: middle; display: inline-block;"></i>Website Launch</h3>
+      <p style="color: #666; line-height: 1.6;">Welcome to my newly redesigned personal website! Explore my work and stay tuned for upcoming content.</p>
+    </div>
+    
+    <div style="text-align: left; background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 25px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+      <div style="display: flex; align-items: center; margin-bottom: 10px;">
+        <span style="background: #D3D3B0; color: #333; padding: 5px 12px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-right: 10px;">RESEARCH</span>
+        <span style="color: #999; font-size: 14px;">Coming Soon</span>
+      </div>
+      <h3 style="margin-bottom: 10px; color: #333;"><i data-feather="book" style="width: 28px; height: 28px; color: #556B2F; margin-right: 10px; vertical-align: middle; display: inline-block;"></i>Latest Research</h3>
+      <p style="color: #666; line-height: 1.6;">Check back soon for my latest research papers and findings.</p>
+    </div>
+    
+    <div style="text-align: left; background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+      <div style="display: flex; align-items: center; margin-bottom: 10px;">
+        <span style="background: #a0a0a0; color: white; padding: 5px 12px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-right: 10px;">VIDEO</span>
+        <span style="color: #999; font-size: 14px;">Coming Soon</span>
+      </div>
+      <h3 style="margin-bottom: 10px; color: #333;"><i data-feather="video" style="width: 28px; height: 28px; color: #556B2F; margin-right: 10px; vertical-align: middle; display: inline-block;"></i>New Video Series</h3>
+      <p style="color: #666; line-height: 1.6;">Stay tuned for exciting new video content on my YouTube channel!</p>
+    </div>
+  </div>
+
+  <!-- Quick Links -->
+  <div style="max-width: 900px; margin: 0 auto; margin-bottom: 40px; text-align: center;">
+    <h2 style="margin-bottom: 30px; text-align: center;">Explore My Work</h2>
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
+      <a href="{{ site.baseurl }}/profile/" style="background: #556B2F; color: white; padding: 15px 30px; border-radius: 5px; text-decoration: none; font-weight: bold; transition: all 0.3s;">
+        About Me
+      </a>
+      <a href="{{ site.baseurl }}/research/" style="background: #556B2F; color: white; padding: 15px 30px; border-radius: 5px; text-decoration: none; font-weight: bold; transition: all 0.3s;">
+        Research
+      </a>
+      <a href="{{ site.baseurl }}/podcasts/" style="background: #556B2F; color: white; padding: 15px 30px; border-radius: 5px; text-decoration: none; font-weight: bold; transition: all 0.3s;">
+        Podcasts
+      </a>
+      <a href="{{ site.baseurl }}/videos/" style="background: #556B2F; color: white; padding: 15px 30px; border-radius: 5px; text-decoration: none; font-weight: bold; transition: all 0.3s;">
+        Videos
+      </a>
+      <a href="{{ site.baseurl }}/lab/" style="background: #556B2F; color: white; padding: 15px 30px; border-radius: 5px; text-decoration: none; font-weight: bold; transition: all 0.3s;">
+        Lab
+      </a>
+    </div>
+  </div>
+
+  <!-- Connect Section -->
+  <div style="max-width: 900px; margin: 0 auto; margin-top: 60px; text-align: center;">
+    <h2 style="margin-bottom: 30px; text-align: center;"><i data-feather="mail" style="width: 40px; height: 40px; color: #556B2F; margin-right: 15px; vertical-align: middle; display: inline-block;"></i>Connect with Me</h2>
+    <div style="display: flex; justify-content: center; gap: 25px; flex-wrap: wrap;">
+      <a href="https://www.linkedin.com/in/chirui-h-595ba6270" target="_blank" style="color: #0077B5; text-decoration: none; font-size: 18px; font-weight: 500; transition: opacity 0.3s; display: flex; align-items: center;">
+        <i data-feather="briefcase" style="width: 24px; height: 24px; color: #0077B5; margin-right: 8px;"></i>LinkedIn
+      </a>
+      <a href="https://instagram.com/cheerie.huang" target="_blank" style="color: #E4405F; text-decoration: none; font-size: 18px; font-weight: 500; transition: opacity 0.3s; display: flex; align-items: center;">
+        <i data-feather="camera" style="width: 24px; height: 24px; color: #E4405F; margin-right: 8px;"></i>Instagram
+      </a>
+      <a href="https://youtube.com/@FredyKraft" target="_blank" style="color: #FF0000; text-decoration: none; font-size: 18px; font-weight: 500; transition: opacity 0.3s; display: flex; align-items: center;">
+        <i data-feather="tv" style="width: 24px; height: 24px; color: #FF0000; margin-right: 8px;"></i>YouTube
+      </a>
+      <a href="mailto:Fredykraft7@gmail.com" style="color: #556B2F; text-decoration: none; font-size: 18px; font-weight: 500; transition: opacity 0.3s; display: flex; align-items: center;">
+        <i data-feather="mail" style="width: 24px; height: 24px; color: #556B2F; margin-right: 8px;"></i>Email
+      </a>
+    </div>
+  </div>
+  </div>
+</div>
+<script>
+  // Initialize Feather Icons
+  feather.replace();
+</script>

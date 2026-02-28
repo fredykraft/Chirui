@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include head.html %}
+
+<body>
+  {% if site.google-analytics %}
+    {% include analytics.html %}
+  {% endif %}
+  {% include header.html %}
+  <div class="o-wrapper">
+    {{ content }}
+  </div> <!-- /.o-wrapper -->
+  <div class="c-top" data-icon='ei-chevron-up' data-size='s' title="Scroll To Top"></div> <!-- /.c-top -->
+  <footer style="text-align: center; padding: 40px 20px; color: #a0a0a0; font-size: 14px;">
+    <p>&copy; {{ site.time | date: '%Y' }} Chirui Huang. All rights reserved.</p>
+  </footer>
+  {% include javascripts.html %}
+</body>
+</html>
