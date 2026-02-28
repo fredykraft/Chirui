@@ -5,58 +5,123 @@ permalink: /videos/
 ---
 
 <style>
-  ul { list-style: none; padding-left: 0; }
-  h1 { margin: 0 0 12px 0; }
-  h1 + p { margin-top: 0; }
-  h3 { font-size: 20px; margin: 15px 0 8px 0; }
-  li { margin-bottom: 30px; }
-  .video { position: relative; width: 100%; max-width: 560px; margin: 15px 0; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; }
-  .video iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-  @media (max-width:768px){h1{font-size:28px}h2{font-size:22px}p{font-size:16px}}
-  @media (max-width:480px){h1{font-size:24px}h2{font-size:18px}p{font-size:14px}}
+  .media-page {
+    max-width: 980px;
+  }
+  .media-page__intro {
+    margin-bottom: 24px;
+  }
+  .media-category {
+    margin: 28px 0;
+    padding-top: 18px;
+    border-top: 2px solid #556B2F;
+  }
+  .media-category:first-of-type {
+    margin-top: 22px;
+  }
+  .media-category h2 {
+    margin: 0 0 14px 0;
+    color: #556B2F;
+    font-weight: 700;
+  }
+  .media-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+  .media-item {
+    margin-bottom: 14px;
+    padding: 14px 16px;
+    border: 1px solid #e7e7e7;
+    border-radius: 8px;
+  }
+  .media-item:last-child {
+    margin-bottom: 0;
+  }
+  .media-item h3 {
+    margin: 0 0 8px 0;
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .video {
+    position: relative;
+    width: 100%;
+    max-width: 560px;
+    margin: 10px 0;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+  .video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  .media-actions a {
+    color: #556B2F;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .media-actions a:hover {
+    text-decoration: underline;
+  }
+  @media (max-width:768px){.media-page h1{font-size:28px}.media-page h2{font-size:22px}.media-page p{font-size:16px}.media-item h3{font-size:18px}}
+  @media (max-width:480px){.media-page h1{font-size:24px}.media-page h2{font-size:18px}.media-page p{font-size:14px}.media-item{padding:12px}.media-item h3{font-size:16px}}
 </style>
 
-<h1>Video</h1>
-<p>Educational and exploratory content across my research and interests.</p>
+<section class="media-page">
+  <h1>Video</h1>
+  <p class="media-page__intro">Educational and exploratory content across research, technology, investing, and arts.</p>
 
-<h2>Operations, Information & Technology</h2>
-<ul>
-  <li>
-    <h3>Video 1: Operational Excellence Fundamentals</h3>
-    <div class="video">
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID_V1" frameborder="0" allowfullscreen></iframe>
-    </div>
-    <p><a href="https://www.youtube.com/watch?v=VIDEO_ID_V1" target="_blank">Open on YouTube</a></p>
-  </li>
-  <li>
-    <h3>Video 2: Digital Transformation and Technology</h3>
-    <div class="video">
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID_V2" frameborder="0" allowfullscreen></iframe>
-    </div>
-    <p><a href="https://www.youtube.com/watch?v=VIDEO_ID_V2" target="_blank">Open on YouTube</a></p>
-  </li>
-</ul>
+  <section class="media-category">
+    <h2>Operations, Information & Technology</h2>
+    <ul class="media-list">
+      <li class="media-item">
+        <h3>Video 1: Operational Excellence Fundamentals</h3>
+        <div class="video">
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID_V1" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div class="media-actions"><a href="https://www.youtube.com/watch?v=VIDEO_ID_V1" target="_blank">Open on YouTube</a></div>
+      </li>
+      <li class="media-item">
+        <h3>Video 2: Digital Transformation and Technology</h3>
+        <div class="video">
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID_V2" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div class="media-actions"><a href="https://www.youtube.com/watch?v=VIDEO_ID_V2" target="_blank">Open on YouTube</a></div>
+      </li>
+    </ul>
+  </section>
 
-<h2>Investing</h2>
-<ul>
-  <li>
-    <h3>Video 3: Investment Strategy & Analysis</h3>
-    <div class="video">
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID_V3" frameborder="0" allowfullscreen></iframe>
-    </div>
-    <p><a href="https://www.youtube.com/watch?v=VIDEO_ID_V3" target="_blank">Open on YouTube</a></p>
-  </li>
-</ul>
+  <section class="media-category">
+    <h2>Investing</h2>
+    <ul class="media-list">
+      <li class="media-item">
+        <h3>Video 3: Investment Strategy & Analysis</h3>
+        <div class="video">
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID_V3" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div class="media-actions"><a href="https://www.youtube.com/watch?v=VIDEO_ID_V3" target="_blank">Open on YouTube</a></div>
+      </li>
+    </ul>
+  </section>
 
-<h2>Arts</h2>
-<ul>
-  <li>
-    <h3>Video 4: Performing Arts & Creativity</h3>
-    <div class="video">
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID_V4" frameborder="0" allowfullscreen></iframe>
-    </div>
-    <p><a href="https://www.youtube.com/watch?v=VIDEO_ID_V4" target="_blank">Open on YouTube</a></p>
-  </li>
-</ul>
+  <section class="media-category">
+    <h2>Arts</h2>
+    <ul class="media-list">
+      <li class="media-item">
+        <h3>Video 4: Performing Arts & Creativity</h3>
+        <div class="video">
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID_V4" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div class="media-actions"><a href="https://www.youtube.com/watch?v=VIDEO_ID_V4" target="_blank">Open on YouTube</a></div>
+      </li>
+    </ul>
+  </section>
 
-<p style="margin-top: 30px; color: #666;"><em>More videos coming soon...</em></p>
+  <p style="margin-top: 30px; color: #666;"><em>More videos coming soon...</em></p>
+</section>

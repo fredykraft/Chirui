@@ -5,44 +5,97 @@ permalink: /podcasts/
 ---
 
 <style>
-  ul { list-style: none; padding-left: 0; }
-  h1 { margin: 0 0 12px 0; }
-  h1 + p { margin-top: 0; }
-  h3 { font-size: 20px; margin: 15px 0 8px 0; }
-  li { margin-bottom: 20px; }
-  @media (max-width:768px){h1{font-size:28px}h2{font-size:22px}p{font-size:16px}}
-  @media (max-width:480px){h1{font-size:24px}h2{font-size:18px}p{font-size:14px}}
+  .media-page {
+    max-width: 980px;
+  }
+  .media-page__intro {
+    margin-bottom: 24px;
+  }
+  .media-category {
+    margin: 28px 0;
+    padding-top: 18px;
+    border-top: 2px solid #556B2F;
+  }
+  .media-category:first-of-type {
+    margin-top: 22px;
+  }
+  .media-category h2 {
+    margin: 0 0 14px 0;
+    color: #556B2F;
+    font-weight: 700;
+  }
+  .media-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+  .media-item {
+    margin-bottom: 14px;
+    padding: 14px 16px;
+    border: 1px solid #e7e7e7;
+    border-radius: 8px;
+  }
+  .media-item:last-child {
+    margin-bottom: 0;
+  }
+  .media-item h3 {
+    margin: 0 0 6px 0;
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .media-actions {
+    margin-top: 6px;
+    white-space: nowrap;
+  }
+  .media-actions a {
+    color: #556B2F;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .media-actions a:hover {
+    text-decoration: underline;
+  }
+  @media (max-width:768px){.media-page h1{font-size:28px}.media-page h2{font-size:22px}.media-page p{font-size:16px}.media-item h3{font-size:18px}}
+  @media (max-width:480px){.media-page h1{font-size:24px}.media-page h2{font-size:18px}.media-page p{font-size:14px}.media-item{padding:12px}.media-item h3{font-size:16px}}
 </style>
 
-<h1>Podcast</h1>
-<p>Conversations exploring my research and interests.</p>
+<section class="media-page">
+  <h1>Podcast</h1>
+  <p class="media-page__intro">Conversations exploring research, technology, investing, and creative work.</p>
 
-<h2>Operations, Information & Technology</h2>
-<ul>
-  <li>
-    <h3>Episode 1: Operations and Organizational Efficiency</h3>
-    <p><a href="https://www.youtube.com/@FredyKraft" target="_blank">Watch</a> | <a href="https://www.youtube.com/@FredyKraft" target="_blank">Subscribe</a></p>
-  </li>
-  <li>
-    <h3>Episode 2: Information Systems Strategy</h3>
-    <p><a href="https://www.youtube.com/@FredyKraft" target="_blank">Watch</a> | <a href="https://www.youtube.com/@FredyKraft" target="_blank">Subscribe</a></p>
-  </li>
-</ul>
+  <section class="media-category">
+    <h2>Operations, Information & Technology</h2>
+    <ul class="media-list">
+      <li class="media-item">
+        <h3>Episode 1: Operations and Organizational Efficiency</h3>
+        <div class="media-actions"><a href="https://www.youtube.com/@FredyKraft" target="_blank">Watch</a> | <a href="https://www.youtube.com/@FredyKraft" target="_blank">Subscribe</a></div>
+      </li>
+      <li class="media-item">
+        <h3>Episode 2: Information Systems Strategy</h3>
+        <div class="media-actions"><a href="https://www.youtube.com/@FredyKraft" target="_blank">Watch</a> | <a href="https://www.youtube.com/@FredyKraft" target="_blank">Subscribe</a></div>
+      </li>
+    </ul>
+  </section>
 
-<h2>Investing</h2>
-<ul>
-  <li>
-    <h3>Episode 3: Investment Strategy and Decision-Making</h3>
-    <p><a href="https://www.youtube.com/@FredyKraft" target="_blank">Watch</a> | <a href="https://www.youtube.com/@FredyKraft" target="_blank">Subscribe</a></p>
-  </li>
-</ul>
+  <section class="media-category">
+    <h2>Investing</h2>
+    <ul class="media-list">
+      <li class="media-item">
+        <h3>Episode 3: Investment Strategy and Decision-Making</h3>
+        <div class="media-actions"><a href="https://www.youtube.com/@FredyKraft" target="_blank">Watch</a> | <a href="https://www.youtube.com/@FredyKraft" target="_blank">Subscribe</a></div>
+      </li>
+    </ul>
+  </section>
 
-<h2>Arts</h2>
-<ul>
-  <li>
-    <h3>Episode 4: Performing Arts & Creative Expression</h3>
-    <p><a href="https://www.youtube.com/@FredyKraft" target="_blank">Watch</a> | <a href="https://www.youtube.com/@FredyKraft" target="_blank">Subscribe</a></p>
-  </li>
-</ul>
+  <section class="media-category">
+    <h2>Arts</h2>
+    <ul class="media-list">
+      <li class="media-item">
+        <h3>Episode 4: Performing Arts & Creative Expression</h3>
+        <div class="media-actions"><a href="https://www.youtube.com/@FredyKraft" target="_blank">Watch</a> | <a href="https://www.youtube.com/@FredyKraft" target="_blank">Subscribe</a></div>
+      </li>
+    </ul>
+  </section>
 
-<p style="margin-top: 30px; color: #666;"><em>More episodes coming soon...</em></p>
+  <p style="margin-top: 30px; color: #666;"><em>More episodes coming soon...</em></p>
+</section>
