@@ -9,3 +9,10 @@ _config_dev.yml
 ADMIN_PASSWORD.md
 ADMIN_ANALYTICS_GUIDE.md
 _config.local.yml
+SECURITY_SETUP.md
+SECURITY_ACTION_REQUIRED.md
+COOKIE_TRACKING_GUIDE.md
+
+# Personal/sensitive documents
+*.local.*
+*.secret.*
