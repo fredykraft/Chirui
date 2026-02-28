@@ -7,7 +7,7 @@
   top: 0;
   width: 100%;
   margin: 0;
-  padding: 20px 0;
+  padding: 15px 0;
   background-color: #fbfbfb;
   z-index: 100;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
@@ -29,8 +29,14 @@
 .c-search {
   width: 80%;
   .c-search__box {
+    position: relative;
     display: flex;
     align-items: center;
+    > div[data-icon] {
+      position: absolute;
+      top: 7px;
+      left: 15px;
+    }
   }
   .c-search__text {
     position: relative;
@@ -180,7 +186,8 @@
 
 @media only screen and (max-width: 900px) {
   .c-header {
-    margin: 15px 0;
+    margin: 0;
+    padding: 15px 0;
   }
 }
 
