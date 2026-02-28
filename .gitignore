@@ -4,3 +4,8 @@ _site/
 .jekyll-cache/
 .jekyll-metadata
 _config_dev.yml
+
+# Sensitive files - DO NOT COMMIT
+ADMIN_PASSWORD.md
+ADMIN_ANALYTICS_GUIDE.md
+_config.local.yml

@@ -7,7 +7,7 @@ url: "https://fredykraft.github.io" # the base hostname & protocol for your site
 author-name:    Chirui Huang
 # author-image:   1.jpg  # Uncomment and add your profile photo when ready
 author-job:     Researcher
-author-email:   Fredykraft7@gmail.com
+author-email:   your.email@example.com  # ⚠️ Replace with your actual email or use _config.local.yml
 about-author:   Welcome to my personal website.
 
 # Social settings (add your handles here)

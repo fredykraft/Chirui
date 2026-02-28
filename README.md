@@ -176,7 +176,18 @@ Change the color values to customize your site's appearance.
 
 ---
 
-## 📞 Contact & Author
+## � Support This Project
+
+If you find this website template useful, consider supporting my work:
+
+- 💳 **PayPal**: [paypal.me/saygoodnight88](https://paypal.me/saygoodnight88)
+- 💵 **Zelle**: saygoodnight88@gmail.com
+
+Your support helps me create more content and maintain this website!
+
+---
+
+## �📞 Contact & Author
 
 **Chirui Huang**  
 📧 Fredykraft7@gmail.com  
