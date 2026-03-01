@@ -9,11 +9,60 @@ $(document).ready(function () {
   var searchInput = document.getElementById('js-search-input');
   var resultsContainer = document.getElementById('js-results-container');
 
-  if (searchInput && resultsContainer) {
+  if (searchInput && resultsContainer && window.SimpleJekyllSearch) {
     var searchJsonPath = searchInput.getAttribute('data-search-json') || '/search.json';
     var siteBaseUrl = (searchInput.getAttribute('data-site-baseurl') || '').replace(/\/+$/g, '');
-    var homeUrl = searchInput.getAttribute('data-home-url') || '/';
-    var siteTitle = (searchInput.getAttribute('data-site-title') || '').toLowerCase();
+
+    console.log('[Search] Initializing with:', searchJsonPath);
+
+    SimpleJekyllSearch({
+      searchInput: searchInput,
+      resultsContainer: resultsContainer,
+      json: searchJsonPath,
+      searchResultTemplate: '<li class="c-search-results-list__item"><a class="c-search-results-list__link" href="{url}"><span class="c-search-results-list__title">{title}</span><span class="c-search-results-list__meta">Category: {category}</span><span class="c-search-results-list__snippet">{content}</span></a></li>',
+      noResultsText: '<li class="c-search-results-list__item"><p class="c-search-results-list__empty">No results found</p></li>',
+      limit: 8,
+      fuzzy: false
+    });
+
+    console.log('[Search] Successfully initialized');
+
+    // Clear results when clicking outside
+    document.addEventListener('click', function (event) {
+      if (!event.target.closest('.c-search')) {
+        resultsContainer.innerHTML = '';
+      }
+    });
+
+    // Clear results on Escape key
+    searchInput.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') {
+        searchInput.value = '';
+        resultsContainer.innerHTML = '';
+      }
+    });
+  } else if (searchInput && resultsContainer) {
+    console.error('[Search] SimpleJekyllSearch library not loaded');
+    resultsContainer.innerHTML = '<li class="c-search-results-list__item"><p class="c-search-results-list__empty">Search unavailable</p></li>';
+  }
+
+  /* =======================
+  // Old Search Code (disabled)
+  ======================= */
+
+  function oldSearchCode() {
+    // Keeping old search code commented for reference
+    var searchInput_old = document.getElementById('js-search-input');
+    var resultsContainer_old = document.getElementById('js-results-container');
+
+    if (!searchInput_old || !resultsContainer_old || window.SimpleJekyllSearch) {
+      return; // Skip if using new search
+    }
+
+    var searchJsonPath = searchInput_old.getAttribute('data-search-json') || '/search.json';
+    var siteBaseUrl = (searchInput_old.getAttribute('data-site-baseurl') || '').replace(/\/+$/g, '');
+    var homeUrl = searchInput_old.getAttribute('data-home-url') || '/';
+    var siteTitle = (searchInput_old.getAttribute('data-site-title') || '').toLowerCase();
 
     console.log('[Search] Loading from:', searchJsonPath);
 
@@ -51,7 +100,7 @@ $(document).ready(function () {
       })
       .catch(function (error) {
         console.error('[Search] Error loading search index:', error);
-        resultsContainer.innerHTML = '<li class="c-search-results-list__item"><p class="c-search-results-list__empty">Search unavailable: ' + error.message + '</p></li>';
+        resultsContainer_old.innerHTML = '<li class="c-search-results-list__item"><p class="c-search-results-list__empty">Search unavailable: ' + error.message + '</p></li>';
       });
 
     function bindSearch(index) {
