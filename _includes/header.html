@@ -8,7 +8,12 @@
       </div>
       <ul id="js-results-container" class="c-search-results-list"></ul>
     </div>
-    <div class="c-nav">
+    <button class="c-hamburger" id="js-hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+      <span class="c-hamburger__line"></span>
+      <span class="c-hamburger__line"></span>
+      <span class="c-hamburger__line"></span>
+    </button>
+    <nav class="c-nav" id="js-nav-menu">
       <ul class="c-nav__list u-lists-reset">
         <li class="c-nav__item {% if page.url == '/' or page.url == '/index.html' %}is-active{% endif %}">
           <a href="{{ site.baseurl }}/">Home</a>
@@ -29,6 +34,6 @@
           <a href="{{ site.baseurl }}/lab/">Lab</a>
         </li>
       </ul>
-    </div>
+    </nav>
   </div>
 </header> <!-- /.c-header -->

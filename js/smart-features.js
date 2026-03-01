@@ -432,6 +432,54 @@
   }
 
   // ============================================
+  // 11. MOBILE RESPONSIVE HAMBURGER MENU
+  // ============================================
+  function initMobileMenu() {
+    const hamburger = document.getElementById('js-hamburger');
+    const navMenu = document.getElementById('js-nav-menu');
+    
+    if (!hamburger || !navMenu) return;
+    
+    // Toggle menu on hamburger click
+    hamburger.addEventListener('click', function() {
+      const isOpen = hamburger.classList.toggle('is-active');
+      navMenu.classList.toggle('is-open');
+      hamburger.setAttribute('aria-expanded', isOpen);
+    });
+
+    // Close menu when a link is clicked
+    const navLinks = navMenu.querySelectorAll('a');
+    navLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        hamburger.classList.remove('is-active');
+        navMenu.classList.remove('is-open');
+        hamburger.setAttribute('aria-expanded', false);
+      });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const isClickInsideMenu = navMenu.contains(event.target);
+      const isClickOnHamburger = hamburger.contains(event.target);
+      
+      if (!isClickInsideMenu && !isClickOnHamburger && navMenu.classList.contains('is-open')) {
+        hamburger.classList.remove('is-active');
+        navMenu.classList.remove('is-open');
+        hamburger.setAttribute('aria-expanded', false);
+      }
+    });
+
+    // Handle window resize - close menu on larger screens
+    window.addEventListener('resize', function() {
+      if (window.innerWidth > 640) {
+        hamburger.classList.remove('is-active');
+        navMenu.classList.remove('is-open');
+        hamburger.setAttribute('aria-expanded', false);
+      }
+    });
+  }
+
+  // ============================================
   // INITIALIZE ALL FEATURES
   // ============================================
   function init() {
@@ -452,6 +500,7 @@
       enhanceScrollToTop();
       initLazyLoading();
       initSmartLinks();
+      initMobileMenu();
 
       console.log('✨ Smart features initialized successfully!');
     } catch (error) {
