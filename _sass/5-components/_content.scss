@@ -13,15 +13,24 @@
 }
 
 .c-search-hit {
-  background: $primary-color;
-  color: $white-color;
-  padding: 0 3px;
+  background: #FFD700;
+  color: #333;
+  padding: 2px 4px;
   border-radius: 3px;
   font-weight: 700;
+  box-shadow: 0 0 0 1px rgba(255, 215, 0, 0.3);
+  transition: all 0.3s ease;
 }
 
 .c-search-hit--focus {
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.15);
+  background: #FFA500;
+  box-shadow: 0 0 8px 2px rgba(255, 165, 0, 0.6);
+  animation: pulse 1.5s ease-in-out 2;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
 @media only screen and (max-width: 900px) {

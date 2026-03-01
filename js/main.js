@@ -20,7 +20,7 @@ $(document).ready(function () {
         searchInput: searchInput,
         resultsContainer: resultsContainer,
         json: searchJsonPath,
-        searchResultTemplate: '<li class="c-search-results-list__item"><a class="c-search-results-list__link" href="{url}"><span class="c-search-results-list__title">{title}</span><span class="c-search-results-list__meta">📄 {category}</span><span class="c-search-results-list__snippet">{content}</span></a></li>',
+        searchResultTemplate: '<li class="c-search-results-list__item"><a class="c-search-results-list__link" href="{url}?search={query}"><span class="c-search-results-list__title">{title}</span><span class="c-search-results-list__meta">🔗 {location}</span><span class="c-search-results-list__snippet">{content}</span></a></li>',
         noResultsText: '<li class="c-search-results-list__item"><p class="c-search-results-list__empty">No results found. Try different keywords.</p></li>',
         limit: 8,
         fuzzy: false,
@@ -33,11 +33,39 @@ $(document).ready(function () {
           resultsContainer.innerHTML = '<li class="c-search-results-list__item"><p class="c-search-results-list__empty">Search is loading...</p></li>';
         },
         templateMiddleware: function(prop, value, template) {
-          // Truncate content to show smart excerpts
+          // Show readable location from URL
+          if (prop === 'url') {
+            var location = value.replace(siteBaseUrl, '').replace(/^\//, '').replace(/\/$/, '');
+            if (!location || location === '') {
+              location = 'Home';
+            } else if (location.includes('/')) {
+              location = location.split('/').map(function(part) {
+                return part.charAt(0).toUpperCase() + part.slice(1);
+              }).join(' › ');
+            } else {
+              location = location.charAt(0).toUpperCase() + location.slice(1);
+            }
+            template = template.replace(/{location}/g, location);
+            template = template.replace(/{query}/g, encodeURIComponent(searchInput.value));
+          }
+          
+          // Truncate content to show smart excerpts with context
           if (prop === 'content') {
-            // Remove HTML entities and excessive whitespace
             var cleaned = value.replace(/&[a-z]+;/gi, ' ').replace(/\s+/g, ' ').trim();
-            // Truncate to 150 characters with ellipsis
+            var searchTerm = searchInput.value.toLowerCase();
+            var contentLower = cleaned.toLowerCase();
+            
+            // Try to find the search term in content for better context
+            var termIndex = contentLower.indexOf(searchTerm);
+            if (termIndex !== -1 && cleaned.length > 150) {
+              // Show context around the search term
+              var start = Math.max(0, termIndex - 60);
+              var end = Math.min(cleaned.length, termIndex + searchTerm.length + 90);
+              var excerpt = (start > 0 ? '...' : '') + cleaned.substring(start, end) + (end < cleaned.length ? '...' : '');
+              return excerpt;
+            }
+            
+            // Default truncation if term not found
             if (cleaned.length > 150) {
               var truncated = cleaned.substring(0, 150);
               var lastSpace = truncated.lastIndexOf(' ');
@@ -74,6 +102,85 @@ $(document).ready(function () {
     });
   } else if (searchInput && resultsContainer) {
     console.error('[Search] SimpleJekyllSearch library not loaded');
+  }
+
+  /* =======================
+  // Highlight Search Terms on Page
+  ======================= */
+
+  // Check if user came from a search result
+  var urlParams = new URLSearchParams(window.location.search);
+  var searchQuery = urlParams.get('search');
+  
+  if (searchQuery) {
+    console.log('[Search] Highlighting term:', searchQuery);
+    
+    // Function to highlight text in an element
+    function highlightInElement(element, term) {
+      var walker = document.createTreeWalker(
+        element,
+        NodeFilter.SHOW_TEXT,
+        null,
+        false
+      );
+      
+      var nodesToReplace = [];
+      var node;
+      
+      while (node = walker.nextNode()) {
+        // Skip script and style elements
+        if (node.parentElement.tagName === 'SCRIPT' || 
+            node.parentElement.tagName === 'STYLE' ||
+            node.parentElement.tagName === 'NOSCRIPT') {
+          continue;
+        }
+        
+        var text = node.nodeValue;
+        var lowerText = text.toLowerCase();
+        var lowerTerm = term.toLowerCase();
+        
+        if (lowerText.indexOf(lowerTerm) !== -1) {
+          nodesToReplace.push({
+            node: node,
+            text: text,
+            term: term
+          });
+        }
+      }
+      
+      // Replace nodes with highlighted version
+      nodesToReplace.forEach(function(item) {
+        var regex = new RegExp('(' + item.term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+        var parts = item.text.split(regex);
+        var fragment = document.createDocumentFragment();
+        
+        parts.forEach(function(part) {
+          if (part.toLowerCase() === item.term.toLowerCase()) {
+            var mark = document.createElement('mark');
+            mark.className = 'c-search-hit';
+            mark.textContent = part;
+            fragment.appendChild(mark);
+          } else if (part) {
+            fragment.appendChild(document.createTextNode(part));
+          }
+        });
+        
+        item.node.parentNode.replaceChild(fragment, item.node);
+      });
+    }
+    
+    // Wait for page to load, then highlight
+    setTimeout(function() {
+      var contentArea = document.querySelector('.c-content') || document.body;
+      highlightInElement(contentArea, searchQuery);
+      
+      // Scroll to first highlight
+      var firstHighlight = document.querySelector('.c-search-hit');
+      if (firstHighlight) {
+        firstHighlight.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        firstHighlight.classList.add('c-search-hit--focus');
+      }
+    }, 100);
   }
 
   /* =======================
