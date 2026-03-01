@@ -1,0 +1,63 @@
+<div class="comments-section" style="max-width: 800px; margin: 60px auto; padding: 40px 20px;">
+  <h3 style="color: #333; margin-bottom: 30px; font-size: 28px; text-align: center;">Comments</h3>
+  
+  <!-- Comments Display -->
+  <div id="comments-list" style="margin-bottom: 40px;">
+    <p style="text-align: center; color: #888;">Loading comments...</p>
+  </div>
+
+  <!-- Comment Form -->
+  <div style="background: #f9f9f9; padding: 30px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+    <h4 style="color: #333; margin-bottom: 20px; font-size: 22px;">Leave a Comment</h4>
+    <form id="comment-form">
+      <div style="margin-bottom: 20px;">
+        <label for="comment-name" style="display: block; margin-bottom: 8px; color: #555; font-weight: 600;">Name *</label>
+        <input 
+          type="text" 
+          id="comment-name" 
+          name="name" 
+          required 
+          style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px; transition: border-color 0.3s;"
+          onfocus="this.style.borderColor='#FFB6C1'"
+          onblur="this.style.borderColor='#e0e0e0'"
+        >
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <label for="comment-email" style="display: block; margin-bottom: 8px; color: #555; font-weight: 600;">Email * <span style="font-size: 12px; font-weight: normal; color: #888;">(will not be published)</span></label>
+        <input 
+          type="email" 
+          id="comment-email" 
+          name="email" 
+          required 
+          style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px; transition: border-color 0.3s;"
+          onfocus="this.style.borderColor='#FFB6C1'"
+          onblur="this.style.borderColor='#e0e0e0'"
+        >
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <label for="comment-content" style="display: block; margin-bottom: 8px; color: #555; font-weight: 600;">Comment *</label>
+        <textarea 
+          id="comment-content" 
+          name="content" 
+          rows="5" 
+          required 
+          style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px; resize: vertical; transition: border-color 0.3s; font-family: inherit;"
+          onfocus="this.style.borderColor='#FFB6C1'"
+          onblur="this.style.borderColor='#e0e0e0'"
+        ></textarea>
+      </div>
+
+      <button 
+        type="submit" 
+        style="background: #FFB6C1; color: white; border: none; padding: 12px 30px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 2px 8px rgba(255,182,193,0.3);"
+        onmouseover="this.style.background='#ff9db3'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(255,182,193,0.4)'"
+        onmouseout="this.style.background='#FFB6C1'; this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(255,182,193,0.3)'"
+      >
+        Submit Comment
+      </button>
+      <p style="margin-top: 15px; font-size: 14px; color: #888;">Your comment will be reviewed before being published.</p>
+    </form>
+  </div>
+</div>

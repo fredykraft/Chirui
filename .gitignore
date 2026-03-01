@@ -17,3 +17,10 @@ COOKIE_TRACKING_GUIDE.md
 # Personal/sensitive documents
 *.local.*
 *.secret.*
+
+# PocketBase
+pocketbase
+pb_data/
+pb_migrations/
+pocketbase.log
+nohup.out

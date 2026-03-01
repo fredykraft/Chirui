@@ -574,5 +574,24 @@ $(document).ready(function () {
     };
   });
 
+  /* =======================
+  // Contact Form Popup
+  ======================= */
+
+  $('.js-form-open').click(function (e) {
+    e.preventDefault();
+    $('.c-form-box').addClass('is-visible');
+    $('body').addClass('is-overflow');
+  });
+
+  $('.c-form-bnt__close, .c-form-box').click(function () {
+    $('.c-form-box').removeClass('is-visible');
+    $('body').removeClass('is-overflow');
+  });
+
+  $('.c-form').click(function (e) {
+    e.stopPropagation();
+  });
+
 
 });
