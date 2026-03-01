@@ -15,17 +15,48 @@ $(document).ready(function () {
 
     console.log('[Search] Initializing with:', searchJsonPath);
 
-    SimpleJekyllSearch({
-      searchInput: searchInput,
-      resultsContainer: resultsContainer,
-      json: searchJsonPath,
-      searchResultTemplate: '<li class="c-search-results-list__item"><a class="c-search-results-list__link" href="{url}"><span class="c-search-results-list__title">{title}</span><span class="c-search-results-list__meta">Category: {category}</span><span class="c-search-results-list__snippet">{content}</span></a></li>',
-      noResultsText: '<li class="c-search-results-list__item"><p class="c-search-results-list__empty">No results found</p></li>',
-      limit: 8,
-      fuzzy: false
-    });
+    try {
+      SimpleJekyllSearch({
+        searchInput: searchInput,
+        resultsContainer: resultsContainer,
+        json: searchJsonPath,
+        searchResultTemplate: '<li class="c-search-results-list__item"><a class="c-search-results-list__link" href="{url}"><span class="c-search-results-list__title">{title}</span><span class="c-search-results-list__meta">📄 {category}</span><span class="c-search-results-list__snippet">{content}</span></a></li>',
+        noResultsText: '<li class="c-search-results-list__item"><p class="c-search-results-list__empty">No results found. Try different keywords.</p></li>',
+        limit: 8,
+        fuzzy: false,
+        exclude: [],
+        success: function() {
+          console.log('[Search] Successfully loaded');
+        },
+        error: function(err) {
+          console.error('[Search] Error:', err);
+          resultsContainer.innerHTML = '<li class="c-search-results-list__item"><p class="c-search-results-list__empty">Search is loading...</p></li>';
+        },
+        templateMiddleware: function(prop, value, template) {
+          // Truncate content to show smart excerpts
+          if (prop === 'content') {
+            // Remove HTML entities and excessive whitespace
+            var cleaned = value.replace(/&[a-z]+;/gi, ' ').replace(/\s+/g, ' ').trim();
+            // Truncate to 150 characters with ellipsis
+            if (cleaned.length > 150) {
+              var truncated = cleaned.substring(0, 150);
+              var lastSpace = truncated.lastIndexOf(' ');
+              if (lastSpace > 100) {
+                truncated = truncated.substring(0, lastSpace);
+              }
+              return truncated + '...';
+            }
+            return cleaned;
+          }
+          return value;
+        }
+      });
 
-    console.log('[Search] Successfully initialized');
+      console.log('[Search] Successfully initialized');
+    } catch (error) {
+      console.error('[Search] Initialization error:', error);
+      resultsContainer.innerHTML = '<li class="c-search-results-list__item"><p class="c-search-results-list__empty">Search temporarily unavailable</p></li>';
+    }
 
     // Clear results when clicking outside
     document.addEventListener('click', function (event) {
@@ -43,7 +74,6 @@ $(document).ready(function () {
     });
   } else if (searchInput && resultsContainer) {
     console.error('[Search] SimpleJekyllSearch library not loaded');
-    resultsContainer.innerHTML = '<li class="c-search-results-list__item"><p class="c-search-results-list__empty">Search unavailable</p></li>';
   }
 
   /* =======================
