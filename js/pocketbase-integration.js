@@ -23,8 +23,17 @@ class PocketBaseClient {
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to create record');
+        let errorMessage = 'Failed to create record';
+        try {
+          const error = await response.json();
+          errorMessage = error.message || errorMessage;
+        } catch (_) {
+          const fallbackText = await response.text();
+          if (fallbackText) {
+            errorMessage = fallbackText;
+          }
+        }
+        throw new Error(`HTTP ${response.status}: ${errorMessage}`);
       }
 
       return await response.json();
@@ -229,20 +238,51 @@ async function loadComments(pageUrl) {
 }
 
 async function submitComment(commentData) {
-  try {
-    const data = {
-      ...commentData,
-      page_url: window.location.pathname,
-      status: 'pending',
-      created_date: new Date().toISOString()
-    };
+  const data = {
+    ...commentData,
+    page_url: window.location.pathname,
+    status: 'pending',
+    created_date: new Date().toISOString()
+  };
 
-    await pb.createRecord('comments', data);
-    return true;
-  } catch (error) {
-    console.error('Error submitting comment:', error);
-    throw error;
+  const attempts = [
+    { collection: 'comments', payload: data },
+    { collection: 'pbc_533777971', payload: data },
+    {
+      collection: 'Contacts',
+      payload: {
+        name: commentData.author_name,
+        email: commentData.author_email,
+        subject: 'Guest Book Entry',
+        message: commentData.content,
+        submitted_at: new Date().toISOString()
+      }
+    },
+    {
+      collection: 'pbc_2323132220',
+      payload: {
+        name: commentData.author_name,
+        email: commentData.author_email,
+        subject: 'Guest Book Entry',
+        message: commentData.content,
+        submitted_at: new Date().toISOString()
+      }
+    }
+  ];
+
+  let lastError = null;
+  for (const attempt of attempts) {
+    try {
+      await pb.createRecord(attempt.collection, attempt.payload);
+      return true;
+    } catch (error) {
+      lastError = error;
+      console.warn(`Guest book submit failed for collection ${attempt.collection}:`, error.message);
+    }
   }
+
+  console.error('Error submitting comment:', lastError);
+  throw lastError || new Error('Guest book submission failed');
 }
 
 function displayComments(comments, containerId) {
@@ -316,35 +356,63 @@ document.addEventListener('DOMContentLoaded', function() {
       
       const submitButton = this.querySelector('button[type="submit"]');
       const originalText = submitButton.textContent;
+      const statusDiv = document.getElementById('comment-status');
+      const nameInput = this.querySelector('#comment-name');
+      const emailInput = this.querySelector('#comment-email');
+      const contentInput = this.querySelector('#comment-content');
+
+      function showStatus(type, message) {
+        if (!statusDiv) return;
+        statusDiv.style.display = 'block';
+        if (type === 'success') {
+          statusDiv.style.background = '#d4edda';
+          statusDiv.style.color = '#155724';
+          statusDiv.style.border = '1px solid #c3e6cb';
+        } else {
+          statusDiv.style.background = '#f8d7da';
+          statusDiv.style.color = '#721c24';
+          statusDiv.style.border = '1px solid #f5c6cb';
+        }
+        statusDiv.textContent = message;
+      }
       
       // Rate limiting - 3 comments per 30 minutes
-      const rateCheck = window.RateLimiter.check('comment_form', 3, 30 * 60 * 1000);
+      const rateLimiter = window.RateLimiter || { check: () => ({ allowed: true }) };
+      const rateCheck = rateLimiter.check('comment_form', 3, 30 * 60 * 1000);
       if (!rateCheck.allowed) {
-        alert(rateCheck.message);
+        showStatus('error', rateCheck.message || 'Too many attempts. Please try again later.');
         return false;
       }
       
       // Get and sanitize inputs
-      const name = window.sanitizeInput(this.querySelector('#comment-name').value);
-      const email = window.sanitizeInput(this.querySelector('#comment-email').value);
-      const content = window.sanitizeInput(this.querySelector('#comment-content').value);
+      const sanitize = window.sanitizeInput || ((value) => (value || '').toString().trim());
+      const validateName = window.validateName || ((value) => !!value && value.length >= 2 && value.length <= 50);
+      const validateEmail = window.validateEmail || ((value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value));
+      const validateText = window.validateText || ((value, min, max) => {
+        const length = (value || '').trim().length;
+        return length >= min && length <= max;
+      });
+
+      const name = sanitize(nameInput ? nameInput.value : '');
+      const email = sanitize(emailInput ? emailInput.value : '');
+      const content = sanitize(contentInput ? contentInput.value : '');
       
       // Validate inputs
-      if (!window.validateName(name)) {
-        alert('Please enter a valid name (2-50 characters, letters only)');
-        this.querySelector('#comment-name').focus();
+      if (!validateName(name)) {
+        showStatus('error', 'Please enter a valid name (2-50 characters, letters only).');
+        if (nameInput) nameInput.focus();
         return false;
       }
       
-      if (!window.validateEmail(email)) {
-        alert('Please enter a valid email address');
-        this.querySelector('#comment-email').focus();
+      if (!validateEmail(email)) {
+        showStatus('error', 'Please enter a valid email address.');
+        if (emailInput) emailInput.focus();
         return false;
       }
       
-      if (!window.validateText(content, 10, 1000)) {
-        alert('Comment must be between 10 and 1000 characters');
-        this.querySelector('#comment-content').focus();
+      if (!validateText(content, 10, 1000)) {
+        showStatus('error', 'Message must be between 10 and 1000 characters.');
+        if (contentInput) contentInput.focus();
         return false;
       }
 
@@ -355,6 +423,7 @@ document.addEventListener('DOMContentLoaded', function() {
       };
 
       try {
+        if (statusDiv) statusDiv.style.display = 'none';
         submitButton.disabled = true;
         submitButton.textContent = 'Submitting...';
 
@@ -363,22 +432,19 @@ document.addEventListener('DOMContentLoaded', function() {
         submitButton.textContent = '✓ Submitted!';
         submitButton.style.background = '#4CAF50';
         this.reset();
-
-        const pendingMessage = document.createElement('p');
-        pendingMessage.style.cssText = 'text-align: center; color: #4CAF50; padding: 20px; background: #e8f5e9; border-radius: 8px; margin: 20px 0;';
-        pendingMessage.textContent = 'Your comment has been submitted and is awaiting approval!';
-        this.insertAdjacentElement('afterend', pendingMessage);
+        showStatus('success', '✓ Thank you for signing the guest book! Your message has been submitted to the database.');
 
         setTimeout(() => {
           submitButton.textContent = originalText;
           submitButton.style.background = '';
           submitButton.disabled = false;
-          pendingMessage.remove();
         }, 5000);
 
       } catch (error) {
         submitButton.textContent = '✗ Error';
         submitButton.style.background = '#f44336';
+        showStatus('error', 'Unable to save to database right now. Please try again in a moment.');
+        console.error('Guest book submit error details:', error);
         
         setTimeout(() => {
           submitButton.textContent = originalText;

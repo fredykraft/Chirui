@@ -1,10 +1,7 @@
 <div class="comments-section" style="max-width: 800px; margin: 60px auto; padding: 40px 20px;">
   <!-- Comment Form -->
   <div style="background: #f9f9f9; padding: 30px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-    <form id="comment-form" action="https://formspree.io/f/xnjbylgn" method="POST">
-      <input type="hidden" name="_subject" value="New Guest Book Entry!" />
-      <input type="hidden" name="_next" value="https://fredykraft.github.io/Chirui/?comment=success" />
-      <input type="hidden" name="_template" value="box" />
+    <form id="comment-form" method="POST" novalidate>
       
       <div style="margin-bottom: 20px;">
         <label for="comment-name" style="display: block; margin-bottom: 8px; color: #555; font-weight: 600;">Name *</label>
@@ -62,26 +59,12 @@
       >
         Sign Guest Book
       </button>
-      <p style="margin-top: 15px; font-size: 14px; color: #888;">Your message will be sent directly to me. Thank you for visiting!</p>
+      <p style="margin-top: 15px; font-size: 14px; color: #888;">Your message will be saved to the guest book database. Thank you for visiting!</p>
     </form>
     <div id="comment-status" style="margin-top: 20px; padding: 15px; border-radius: 8px; display: none;"></div>
   </div>
 </div>
 
 <script>
-// Show success message if redirected back with success parameter
-if (window.location.search.includes('comment=success')) {
-  const statusDiv = document.getElementById('comment-status');
-  if (statusDiv) {
-    statusDiv.style.display = 'block';
-    statusDiv.style.background = '#d4edda';
-    statusDiv.style.color = '#155724';
-    statusDiv.style.border = '1px solid #c3e6cb';
-    statusDiv.innerHTML = '✓ Thank you for signing my guest book! Your message has been sent successfully.';
-    // Clear the form
-    document.getElementById('comment-form').reset();
-    // Remove the success parameter from URL
-    window.history.replaceState({}, document.title, window.location.pathname);
-  }
-}
+// Guest book status is managed by PocketBase integration script.
 </script>
