@@ -315,19 +315,20 @@
   .c-header__box {
     flex-wrap: wrap;
     padding: 0 10px;
-    gap: 8px;
+    align-items: flex-start;
   }
   
   .c-hamburger {
     display: flex;
+    order: 1;
     margin-left: auto;
   }
   
   .c-search {
     width: 100%;
-    order: 3;
+    order: 2;
     flex-basis: 100%;
-    margin-top: 8px;
+    margin-top: 12px;
     
     .c-search__text {
       padding: 8px 8px 8px 35px;
@@ -336,7 +337,7 @@
   }
   
   .c-nav {
-    position: fixed;
+    posit8on: fixed;
     top: 70px;
     left: 0;
     right: 0;
@@ -402,7 +403,6 @@
   
   .c-header__box {
     padding: 0 8px;
-    gap: 6px;
   }
   
   .c-hamburger {
@@ -415,6 +415,8 @@
   }
   
   .c-search {
+    margin-top: 10px;
+    
     .c-search__box {
       > div[data-icon] {
         top: 6px;
@@ -442,7 +444,7 @@
   }
   
   .c-nav {
-    top: 58px;
+    top: 68px;
     
     .c-nav__list {
       .c-nav__item {
