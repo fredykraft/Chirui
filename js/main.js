@@ -3,82 +3,197 @@ $(document).ready(function () {
   'use strict';
 
   /* =======================
-  // Simple Search Settings
+  // Enhanced Search with Result Count and Highlighting
   ======================= */
 
   var searchInput = document.getElementById('js-search-input');
   var resultsContainer = document.getElementById('js-results-container');
 
-  if (searchInput && resultsContainer && window.SimpleJekyllSearch) {
+  if (searchInput && resultsContainer) {
     var searchJsonPath = searchInput.getAttribute('data-search-json') || '/search.json';
     var siteBaseUrl = (searchInput.getAttribute('data-site-baseurl') || '').replace(/\/+$/g, '');
+    var searchIndex = [];
 
-    console.log('[Search] Initializing with:', searchJsonPath);
+    console.log('[Search] Loading from:', searchJsonPath);
 
-    try {
-      SimpleJekyllSearch({
-        searchInput: searchInput,
-        resultsContainer: resultsContainer,
-        json: searchJsonPath,
-        searchResultTemplate: '<li class="c-search-results-list__item"><a class="c-search-results-list__link" href="{url}?search={query}"><span class="c-search-results-list__title">{title}</span><span class="c-search-results-list__meta">🔗 {location}</span><span class="c-search-results-list__snippet">{content}</span></a></li>',
-        noResultsText: '<li class="c-search-results-list__item"><p class="c-search-results-list__empty">No results found. Try different keywords.</p></li>',
-        limit: 8,
-        fuzzy: false,
-        exclude: [],
-        success: function() {
-          console.log('[Search] Successfully loaded');
-        },
-        error: function(err) {
-          console.error('[Search] Error:', err);
-          resultsContainer.innerHTML = '<li class="c-search-results-list__item"><p class="c-search-results-list__empty">Search is loading...</p></li>';
-        },
-        templateMiddleware: function(prop, value, template) {
-          // Show readable location from URL
-          if (prop === 'url') {
-            var location = value.replace(siteBaseUrl, '').replace(/^\//, '').replace(/\/$/, '');
-            if (!location || location === '') {
-              location = 'Home';
-            } else if (location.includes('/')) {
-              location = location.split('/').map(function(part) {
-                return part.charAt(0).toUpperCase() + part.slice(1);
-              }).join(' › ');
-            } else {
-              location = location.charAt(0).toUpperCase() + location.slice(1);
-            }
-            template = template.replace(/{location}/g, location);
-            template = template.replace(/{query}/g, encodeURIComponent(searchInput.value));
-          }
-          
-          // Truncate content to show smart excerpts with context
-          if (prop === 'content') {
-            var cleaned = value.replace(/&[a-z]+;/gi, ' ').replace(/\s+/g, ' ').trim();
-            var searchTerm = searchInput.value.toLowerCase();
-            var contentLower = cleaned.toLowerCase();
-            
-            // Try to find the search term in content for better context
-            var termIndex = contentLower.indexOf(searchTerm);
-            if (termIndex !== -1 && cleaned.length > 150) {
-              // Show context around the search term
-              var start = Math.max(0, termIndex - 60);
-              var end = Math.min(cleaned.length, termIndex + searchTerm.length + 90);
-              var excerpt = (start > 0 ? '...' : '') + cleaned.substring(start, end) + (end < cleaned.length ? '...' : '');
-              return excerpt;
-            }
-            
-            // Default truncation if term not found
-            if (cleaned.length > 150) {
-              var truncated = cleaned.substring(0, 150);
-              var lastSpace = truncated.lastIndexOf(' ');
-              if (lastSpace > 100) {
-                truncated = truncated.substring(0, lastSpace);
-              }
-              return truncated + '...';
-            }
-            return cleaned;
-          }
-          return value;
+    // Load search index
+    fetch(searchJsonPath)
+      .then(function(response) {
+        if (!response.ok) throw new Error('Failed to load search index');
+        return response.json();
+      })
+      .then(function(data) {
+        searchIndex = data;
+        console.log('[Search] Loaded', searchIndex.length, 'items');
+      })
+      .catch(function(error) {
+        console.error('[Search] Error:', error);
+      });
+
+    // Search function
+    function performSearch(query) {
+      if (!query || query.length < 2) {
+        resultsContainer.innerHTML = '';
+        return;
+      }
+
+      var queryLower = query.toLowerCase();
+      var results = [];
+
+      // Search through index
+      searchIndex.forEach(function(item) {
+        var titleLower = (item.title || '').toLowerCase();
+        var contentLower = (item.content || '').toLowerCase();
+        var score = 0;
+
+        // Check title match (higher priority)
+        if (titleLower.indexOf(queryLower) !== -1) {
+          score += 10;
+        }
+
+        // Check content match
+        if (contentLower.indexOf(queryLower) !== -1) {
+          score += 5;
+        }
+
+        if (score > 0) {
+          results.push({
+            item: item,
+            score: score,
+            query: query
+          });
         }
       });
+
+      // Sort by score
+      results.sort(function(a, b) {
+        return b.score - a.score;
+      });
+
+      // Limit results
+      results = results.slice(0, 8);
+
+      // Display results
+      displayResults(results, query);
+    }
+
+    // Display search results
+    function displayResults(results, query) {
+      if (results.length === 0) {
+        resultsContainer.innerHTML = '<li class="c-search-results-list__item"><p class="c-search-results-list__empty">No results found. Try different keywords.</p></li>';
+        return;
+      }
+
+      // Add result count header
+      var html = '<li class="c-search-results-list__count">Found ' + results.length + ' result' + (results.length !== 1 ? 's' : '') + ' for "' + escapeHtml(query) + '"</li>';
+
+      results.forEach(function(result) {
+        var item = result.item;
+        var location = getLocation(item.url);
+        var snippet = getSnippet(item.content, query);
+        var highlightedSnippet = highlightText(snippet, query);
+
+        html += '<li class="c-search-results-list__item">' +
+                '<a class="c-search-results-list__link" href="' + escapeHtml(item.url) + '?search=' + encodeURIComponent(query) + '">' +
+                '<span class="c-search-results-list__title">' + highlightText(item.title, query) + '</span>' +
+                '<span class="c-search-results-list__meta">📍 ' + escapeHtml(location) + '</span>' +
+                '<span class="c-search-results-list__snippet">' + highlightedSnippet + '</span>' +
+                '</a></li>';
+      });
+
+      resultsContainer.innerHTML = html;
+    }
+
+    // Get readable location from URL
+    function getLocation(url) {
+      var location = (url || '').replace(siteBaseUrl, '').replace(/^\//, '').replace(/\/$/, '').replace('.html', '');
+      
+      if (!location || location === '') {
+        return 'Home';
+      }
+      
+      if (location.includes('/')) {
+        return location.split('/').map(function(part) {
+          return part.charAt(0).toUpperCase() + part.slice(1).replace(/-/g, ' ');
+        }).join(' › ');
+      }
+      
+      return location.charAt(0).toUpperCase() + location.slice(1).replace(/-/g, ' ');
+    }
+
+    // Get snippet with context around search term
+    function getSnippet(content, query) {
+      var cleaned = (content || '').replace(/&[a-z]+;/gi, ' ').replace(/\s+/g, ' ').trim();
+      var queryLower = query.toLowerCase();
+      var contentLower = cleaned.toLowerCase();
+      var termIndex = contentLower.indexOf(queryLower);
+
+      if (termIndex !== -1) {
+        var start = Math.max(0, termIndex - 50);
+        var end = Math.min(cleaned.length, termIndex + query.length + 100);
+        return (start > 0 ? '...' : '') + cleaned.substring(start, end) + (end < cleaned.length ? '...' : '');
+      }
+
+      return cleaned.length > 150 ? cleaned.substring(0, 150) + '...' : cleaned;
+    }
+
+    // Highlight search terms in text
+    function highlightText(text, query) {
+      if (!text || !query) return text;
+      
+      var regex = new RegExp('(' + escapeRegex(query) + ')', 'gi');
+      return text.replace(regex, '<mark class="search-highlight">$1</mark>');
+    }
+
+    // Escape HTML
+    function escapeHtml(text) {
+      var map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return (text || '').replace(/[&<>"']/g, function(m) { return map[m]; });
+    }
+
+    // Escape regex special characters
+    function escapeRegex(text) {
+      return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    // Debounce function
+    function debounce(func, wait) {
+      var timeout;
+      return function() {
+        var context = this, args = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(function() {
+          func.apply(context, args);
+        }, wait);
+      };
+    }
+
+    // Bind search input
+    searchInput.addEventListener('input', debounce(function(e) {
+      performSearch(e.target.value.trim());
+    }, 200));
+
+    // Clear on Escape
+    searchInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        searchInput.value = '';
+        resultsContainer.innerHTML = '';
+      }
+    });
+
+    // Clear when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.c-search')) {
+        resultsContainer.innerHTML = '';
+      }
+    });
+  }
 
       console.log('[Search] Successfully initialized');
     } catch (error) {
@@ -104,6 +219,7 @@ $(document).ready(function () {
     console.error('[Search] SimpleJekyllSearch library not loaded');
   }
 
+
   /* =======================
   // Highlight Search Terms on Page
   ======================= */
@@ -112,8 +228,8 @@ $(document).ready(function () {
   var urlParams = new URLSearchParams(window.location.search);
   var searchQuery = urlParams.get('search');
   
-  if (searchQuery) {
-    console.log('[Search] Highlighting term:', searchQuery);
+  if (searchQuery && searchQuery.length > 0) {
+    console.log('[Search] Will highlight term:', searchQuery);
     
     // Function to highlight text in an element
     function highlightInElement(element, term) {
@@ -126,12 +242,13 @@ $(document).ready(function () {
       
       var nodesToReplace = [];
       var node;
+      var matchCount = 0;
       
       while (node = walker.nextNode()) {
-        // Skip script and style elements
-        if (node.parentElement.tagName === 'SCRIPT' || 
-            node.parentElement.tagName === 'STYLE' ||
-            node.parentElement.tagName === 'NOSCRIPT') {
+        // Skip script, style, and noscript elements
+        var parentTag = node.parentElement.tagName;
+        if (parentTag === 'SCRIPT' || parentTag === 'STYLE' || 
+            parentTag === 'NOSCRIPT' || parentTag === 'MARK') {
           continue;
         }
         
@@ -145,10 +262,14 @@ $(document).ready(function () {
             text: text,
             term: term
           });
+          matchCount++;
         }
       }
       
+      console.log('[Search] Found', matchCount, 'text nodes containing term');
+      
       // Replace nodes with highlighted version
+      var highlightCount = 0;
       nodesToReplace.forEach(function(item) {
         var regex = new RegExp('(' + item.term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
         var parts = item.text.split(regex);
@@ -160,6 +281,7 @@ $(document).ready(function () {
             mark.className = 'c-search-hit';
             mark.textContent = part;
             fragment.appendChild(mark);
+            highlightCount++;
           } else if (part) {
             fragment.appendChild(document.createTextNode(part));
           }
@@ -167,21 +289,38 @@ $(document).ready(function () {
         
         item.node.parentNode.replaceChild(fragment, item.node);
       });
+      
+      console.log('[Search] Created', highlightCount, 'highlights');
+      return highlightCount;
     }
     
     // Wait for page to load, then highlight
     setTimeout(function() {
-      var contentArea = document.querySelector('.c-content') || document.body;
-      highlightInElement(contentArea, searchQuery);
+      var contentArea = document.querySelector('.c-content') || 
+                        document.querySelector('article') || 
+                        document.querySelector('main') || 
+                        document.body;
       
-      // Scroll to first highlight
-      var firstHighlight = document.querySelector('.c-search-hit');
-      if (firstHighlight) {
-        firstHighlight.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        firstHighlight.classList.add('c-search-hit--focus');
+      console.log('[Search] Highlighting in:', contentArea.tagName, contentArea.className);
+      
+      var totalHighlights = highlightInElement(contentArea, searchQuery);
+      
+      if (totalHighlights > 0) {
+        // Scroll to first highlight
+        var firstHighlight = document.querySelector('.c-search-hit');
+        if (firstHighlight) {
+          console.log('[Search] Scrolling to first match');
+          firstHighlight.classList.add('c-search-hit--focus');
+          setTimeout(function() {
+            firstHighlight.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 200);
+        }
+      } else {
+        console.log('[Search] No highlights created - term may not be in visible content');
       }
-    }, 100);
+    }, 300);
   }
+
 
   /* =======================
   // Old Search Code (disabled)
