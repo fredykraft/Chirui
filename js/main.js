@@ -10,47 +10,70 @@ $(document).ready(function () {
   var resultsContainer = document.getElementById('js-results-container');
 
   if (searchInput && resultsContainer) {
-    var searchJsonPath = searchInput.getAttribute('data-search-json') || '/search.json';
+    var configuredSearchJsonPath = searchInput.getAttribute('data-search-json') || '/search.json';
     var isSearchReady = false;
     var searchLoadFailed = false;
-    
-    // Ensure absolute path for production
-    if (searchJsonPath && !searchJsonPath.startsWith('http') && window.location.hostname !== 'localhost') {
-      var origin = window.location.origin;
-      var pathname = window.location.pathname.split('/').slice(0, 2).join('/'); // Get /Chirui part
-      var basePath = pathname && pathname !== '/' ? pathname : '';
-      searchJsonPath = origin + basePath + '/search.json';
-    }
-    
     var siteBaseUrl = (searchInput.getAttribute('data-site-baseurl') || '').replace(/\/+$/g, '');
     var searchIndex = [];
 
+    var searchJsonCandidates = [];
+
+    function addCandidate(path) {
+      if (!path) return;
+      var normalizedPath = path;
+
+      if (!/^https?:\/\//i.test(normalizedPath)) {
+        normalizedPath = new URL(normalizedPath, window.location.origin).toString();
+      }
+
+      if (searchJsonCandidates.indexOf(normalizedPath) === -1) {
+        searchJsonCandidates.push(normalizedPath);
+      }
+    }
+
+    addCandidate(configuredSearchJsonPath);
+    addCandidate(siteBaseUrl + '/search.json');
+    addCandidate('/search.json');
+    addCandidate('/Chirui/search.json');
+
     console.log('[Search] Initializing...');
-    console.log('[Search] JSON path:', searchJsonPath);
+    console.log('[Search] JSON candidates:', searchJsonCandidates);
     console.log('[Search] Base URL:', siteBaseUrl);
     console.log('[Search] Current location:', window.location.href);
 
-    // Load search index
-    fetch(searchJsonPath)
-      .then(function(response) {
-        console.log('[Search] Response status:', response.status);
-        if (!response.ok) throw new Error('Failed to load search index');
-        return response.json();
-      })
-      .then(function(data) {
-        searchIndex = data;
-        isSearchReady = true;
-        console.log('[Search] Loaded', searchIndex.length, 'items');
-        if (searchIndex.length === 0) {
-          console.warn('[Search] Warning: Search index is empty');
-        }
-      })
-      .catch(function(error) {
+    function loadSearchIndex(candidateIndex) {
+      if (candidateIndex >= searchJsonCandidates.length) {
         searchLoadFailed = true;
-        console.error('[Search] Error:', error);
-        console.error('[Search] Failed to load from:', searchJsonPath);
+        console.error('[Search] Failed to load search index from all candidates');
         resultsContainer.innerHTML = '<li class="c-search-results-list__item"><p class="c-search-results-list__empty">Search is currently unavailable. Please try again later.</p></li>';
-      });
+        return;
+      }
+
+      var activePath = searchJsonCandidates[candidateIndex];
+      fetch(activePath)
+        .then(function(response) {
+          console.log('[Search] Trying', activePath, 'status:', response.status);
+          if (!response.ok) {
+            throw new Error('HTTP ' + response.status);
+          }
+          return response.json();
+        })
+        .then(function(data) {
+          searchIndex = Array.isArray(data) ? data : [];
+          isSearchReady = true;
+          searchLoadFailed = false;
+          console.log('[Search] Loaded', searchIndex.length, 'items from', activePath);
+          if (searchIndex.length === 0) {
+            console.warn('[Search] Warning: Search index is empty');
+          }
+        })
+        .catch(function(error) {
+          console.warn('[Search] Candidate failed:', activePath, error.message);
+          loadSearchIndex(candidateIndex + 1);
+        });
+    }
+
+    loadSearchIndex(0);
 
     // Search function
     function performSearch(query) {
