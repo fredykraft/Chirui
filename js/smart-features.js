@@ -371,7 +371,7 @@
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
       const progress = (scrollTop / documentHeight) * 100;
       
-      circle.style.background = `conic-gradient(#4CAF50 ${progress * 3.6}deg, rgba(255,255,255,0.1) 0deg)`;
+      circle.style.background = `conic-gradient(#FFB6C1 ${progress * 3.6}deg, rgba(255,255,255,0.1) 0deg)`;
       
       if (scrollTop > 300) {
         scrollTopBtn.classList.add('visible');
