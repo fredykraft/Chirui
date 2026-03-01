@@ -44,3 +44,11 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - vendor
+  - admin-analytics.html
+  - ADMIN_PASSWORD.md
+  - ADMIN_PASSWORD.md.template
+  - ADMIN_ANALYTICS_GUIDE.md
+  - ADMIN_ANALYTICS_GUIDE.md.template
+  - SECURITY_SETUP.md
+  - SECURITY_ACTION_REQUIRED.md
+  - COOKIE_TRACKING_GUIDE.md

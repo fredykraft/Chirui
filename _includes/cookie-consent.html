@@ -87,7 +87,7 @@
   right: 0;
   background: linear-gradient(135deg, #556B2F 0%, #3d4d23 100%);
   color: #ffffff;
-  padding: 25px;
+  padding: 14px 16px;
   z-index: 10000;
   box-shadow: 0 -4px 20px rgba(85, 107, 47, 0.3);
   animation: slideUp 0.3s ease-out;
@@ -104,59 +104,59 @@
 }
 
 .cookie-consent-content {
-  max-width: 1200px;
+  max-width: 980px;
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 20px;
+  gap: 12px;
 }
 
 .cookie-consent-text {
   flex: 1;
-  min-width: 300px;
+  min-width: 240px;
 }
 
 .cookie-consent-text h3 {
-  margin: 0 0 10px 0;
-  font-size: 22px;
+  margin: 0 0 6px 0;
+  font-size: 18px;
   color: #D3D3B0;
   font-family: 'Volkhov', 'Times New Roman', Times, serif;
   font-weight: 400;
 }
 
 .cookie-consent-text p {
-  margin: 0 0 10px 0;
-  font-size: 15px;
-  line-height: 1.6;
+  margin: 0 0 6px 0;
+  font-size: 13px;
+  line-height: 1.45;
   font-family: 'Open Sans', Arial, sans-serif;
   color: #f5f5f5;
 }
 
 .cookie-consent-details {
-  font-size: 13px;
+  font-size: 12px;
   opacity: 0.9;
-  margin-top: 8px;
+  margin-top: 4px;
   color: #e8ead8;
   font-family: 'Open Sans', Arial, sans-serif;
 }
 
 .cookie-consent-actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .cookie-btn {
-  padding: 12px 28px;
+  padding: 8px 14px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
   transition: all 0.3s ease;
   font-family: 'Open Sans', Arial, sans-serif;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
   text-transform: uppercase;
 }
 
@@ -444,9 +444,22 @@ input:checked + .cookie-slider:before {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  #cookie-consent-banner {
+    padding: 10px 12px;
+  }
+
   .cookie-consent-content {
     flex-direction: column;
     text-align: center;
+    gap: 8px;
+  }
+
+  .cookie-consent-text h3 {
+    font-size: 16px;
+  }
+
+  .cookie-consent-text p {
+    font-size: 12px;
   }
   
   .cookie-consent-actions {
