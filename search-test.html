@@ -1,0 +1,114 @@
+---
+layout: default
+title: Search Diagnostic Test
+---
+
+<div class="c-wrap-content">
+  <h1>🔍 Search Diagnostic Test</h1>
+  
+  <div style="background: #f0f0f0; padding: 20px; margin: 20px 0; border-radius: 8px;">
+    <h2>Test Results</h2>
+    <div id="diagnostic-results">
+      <p>⏳ Running diagnostics...</p>
+    </div>
+  </div>
+  
+  <h2>Manual Search Test</h2>
+  <p>Try searching below and check if results appear:</p>
+  
+  <div style="background: white; padding: 20px; margin: 20px 0; border-radius: 8px; border: 2px solid #556B2F;">
+    <input type="text" id="test-search" placeholder="Type 'research' to test..." style="width: 100%; padding: 10px; font-size: 16px; border: 1px solid #ddd; border-radius: 4px;">
+    <div id="test-results" style="margin-top: 15px; color: #666;"></div>
+  </div>
+  
+  <h2>console output</h2>
+  <p>Open browser console (F12) to see detailed logs</p>
+</div>
+
+<script>
+(function() {
+  var diagnosticResults = document.getElementById('diagnostic-results');
+  var testSearch = document.getElementById('test-search');
+  var testResults = document.getElementById('test-results');
+  
+  var results = [];
+  
+  function addResult(status, message) {
+    var icon = status === 'pass' ? '✅' : status === 'fail' ? '❌' : 'ℹ️';
+    results.push('<p>' + icon + ' ' + message + '</p>');
+    diagnosticResults.innerHTML = results.join('');
+  }
+  
+  // Check 1: jQuery
+  if (typeof jQuery !== 'undefined') {
+    addResult('pass', 'jQuery loaded (version ' + jQuery.fn.jquery + ')');
+  } else {
+    addResult('fail', 'jQuery NOT loaded');
+  }
+  
+  // Check 2: Search input element
+  var searchInput = document.getElementById('js-search-input');
+  if (searchInput) {
+    addResult('pass', 'Search input element found');
+    addResult('info', 'data-search-json: ' + searchInput.getAttribute('data-search-json'));
+    addResult('info', 'data-site-baseurl: ' + searchInput.getAttribute('data-site-baseurl'));
+  } else {
+    addResult('fail', 'Search input element NOT found');
+  }
+  
+  // Check 3: Results container
+  var resultsContainer = document.getElementById('js-results-container');
+  if (resultsContainer) {
+    addResult('pass', 'Results container found');
+  } else {
+    addResult('fail', 'Results container NOT found');
+  }
+  
+  // Check 4: Try to load search.json
+  addResult('info', 'Attempting to load search.json...');
+  
+  var candidates = [
+    '{{ site.baseurl }}/search.json',
+    '/Chirui/search.json',
+    '/search.json',
+    window.location.origin + '/Chirui/search.json'
+  ];
+  
+  candidates.forEach(function(url) {
+    fetch(url).then(function(response) {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error('HTTP ' + response.status);
+    }).then(function(data) {
+      addResult('pass', 'Loaded search.json from: ' + url + ' (' + data.length + ' entries)');
+      
+      // Simple search test
+      testSearch.addEventListener('input', function(e) {
+        var query = e.target.value.toLowerCase();
+        if (!query) {
+          testResults.innerHTML = '';
+          return;
+        }
+        
+        var matches = data.filter(function(item) {
+          return item.title.toLowerCase().includes(query) || 
+                 item.content.toLowerCase().includes(query);
+        });
+        
+        testResults.innerHTML = '<p><strong>Found ' + matches.length + ' results</strong></p>' +
+          matches.slice(0, 3).map(function(item) {
+            return '<p>• ' + item.title + '</p>';
+          }).join('');
+      });
+      
+    }).catch(function(error) {
+      addResult('fail', 'Failed to load from ' + url + ': ' + error.message);
+    });
+  });
+  
+  // Check 5: Console logs
+  addResult('info', 'Check browser console for [Search] logs');
+  
+})();
+</script>
