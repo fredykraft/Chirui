@@ -315,17 +315,19 @@
   .c-header__box {
     flex-wrap: wrap;
     padding: 0 10px;
+    gap: 8px;
   }
   
   .c-hamburger {
     display: flex;
+    margin-left: auto;
   }
   
   .c-search {
     width: 100%;
     order: 3;
     flex-basis: 100%;
-    margin-top: 10px;
+    margin-top: 8px;
     
     .c-search__text {
       padding: 8px 8px 8px 35px;
@@ -335,7 +337,7 @@
   
   .c-nav {
     position: fixed;
-    top: 60px;
+    top: 70px;
     left: 0;
     right: 0;
     width: 100%;
@@ -400,6 +402,7 @@
   
   .c-header__box {
     padding: 0 8px;
+    gap: 6px;
   }
   
   .c-hamburger {
@@ -439,7 +442,7 @@
   }
   
   .c-nav {
-    top: 50px;
+    top: 58px;
     
     .c-nav__list {
       .c-nav__item {
