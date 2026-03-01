@@ -7,4 +7,9 @@ hr {
   margin: 30px 0;
   border: 0;
   background-color: $border-color;
+  @include theme-transition;
+
+  @include dark-mode {
+    background-color: $dark-mode-border;
+  }
 }

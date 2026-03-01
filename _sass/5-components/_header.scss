@@ -11,6 +11,12 @@
   background-color: #fbfbfb;
   z-index: 100;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  @include theme-transition;
+
+  @include dark-mode {
+    background: linear-gradient(180deg, #151821 0%, rgba(21, 24, 31, 0.9) 100%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(143, 214, 143, 0.08);
+  }
 }
 
 .c-header__box {
@@ -27,6 +33,9 @@
     top: 7px;
     left: 15px;
     fill: $gray-lighter;
+    @include dark-mode {
+      fill: $dark-mode-text-muted;
+    }
   }
 }
 
@@ -57,6 +66,9 @@
   background-color: $dark;
   border-radius: 2px;
   transition: all 0.3s ease;
+  @include dark-mode {
+    background-color: $dark-mode-text;
+  }
 }
 
 .c-hamburger.is-active {
@@ -83,20 +95,21 @@
     position: relative;
     display: flex;
     align-items: center;
-    > div[data-icon] {
-      position: absolute;
-      top: 7px;
-      left: 15px;
-    }
   }
   .c-search__text {
     position: relative;
     width: 100%;
-    padding: 10px 10px 10px 40px;
+    padding: 10px 15px;
     border: 1px solid $blue-lighter;
     border-radius: 30px;
     outline: none;
     color: $gray;
+    @include theme-transition;
+    @include dark-mode {
+      background-color: $dark-mode-input-bg;
+      color: $dark-mode-text;
+      border-color: $dark-mode-input-border;
+    }
     &::placeholder {
       color: $gray-lighter;
     }
@@ -112,6 +125,11 @@
     list-style-type: none;
     background-color: $white-color;
     z-index: 1;
+    @include dark-mode {
+      background: linear-gradient(135deg, rgba(26, 35, 50, 0.95) 0%, rgba(36, 41, 50, 0.95) 100%);
+      border: 1px solid rgba(143, 214, 143, 0.15);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
     .c-search-results-list__item {
       display: flex;
       flex-wrap: wrap;
@@ -122,15 +140,26 @@
       line-height: 1.4;
       border-left: solid 1px $gray-lighten;
       border-right: solid 1px $gray-lighten;
+      @include dark-mode {
+        background: transparent;
+        border-left-color: rgba(143, 214, 143, 0.1);
+        border-right-color: rgba(143, 214, 143, 0.1);
+      }
       &:first-child {
         border-top-left-radius: 5px;
         border-top-right-radius: 5px;
         border-top: solid 1px $gray-lighten;
+        @include dark-mode {
+          border-top-color: rgba(143, 214, 143, 0.15);
+        }
       }
       &:last-child {
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
         border-bottom: solid 1px $gray-lighten;
+        @include dark-mode {
+          border-bottom-color: rgba(143, 214, 143, 0.15);
+        }
       }
     }
     .c-search-results-list__link {
@@ -147,6 +176,9 @@
       font-size: 16px;
       font-weight: 700;
       color: #333;
+      @include dark-mode {
+        color: $dark-mode-text;
+      }
     }
     .c-search-results-list__meta {
       display: block;
@@ -155,6 +187,9 @@
       font-weight: 600;
       color: #556B2F;
       opacity: 0.9;
+      @include dark-mode {
+        color: #a8e6a8;
+      }
     }
     .c-search-results-list__where {
       display: inline-block;
@@ -167,12 +202,19 @@
       border-radius: 999px;
       text-transform: uppercase;
       letter-spacing: .03em;
+      @include dark-mode {
+        background: rgba(143, 214, 143, 0.15);
+        color: #a8e6a8;
+      }
     }
     .c-search-results-list__snippet {
       display: block;
       margin-top: 6px;
       font-size: 13px;
       color: $gray;
+      @include dark-mode {
+        color: $dark-mode-text-secondary;
+      }
     }
     .c-search-results-list__empty {
       width: 100%;
@@ -180,6 +222,9 @@
       padding: 12px 18px;
       font-size: 13px;
       color: $gray;
+      @include dark-mode {
+        color: $dark-mode-text-secondary;
+      }
     }
     .c-search-results-list__count {
       width: 100%;
@@ -196,6 +241,13 @@
       list-style: none;
       text-transform: uppercase;
       letter-spacing: 0.05em;
+      @include dark-mode {
+        background: linear-gradient(135deg, rgba(26, 35, 50, 0.7) 0%, rgba(36, 41, 50, 0.8) 100%);
+        color: #a8e6a8;
+        border-left-color: rgba(143, 214, 143, 0.15);
+        border-right-color: rgba(143, 214, 143, 0.15);
+        border-top-color: rgba(143, 214, 143, 0.15);
+      }
     }
     .c-search-mark {
       background-color: $primary-color;
@@ -203,6 +255,10 @@
       padding: 0 2px;
       border-radius: 2px;
       font-weight: 700;
+      @include dark-mode {
+        background: linear-gradient(135deg, #8fd68f 0%, #a8e6a8 100%);
+        color: #0d0f12;
+      }
     }
     
     // Inline search term highlighting
@@ -212,6 +268,10 @@
       padding: 1px 3px;
       border-radius: 2px;
       font-weight: 600;
+      @include dark-mode {
+        background-color: #ff9500;
+        color: #ffffff;
+      }
     }
   }
 }
@@ -243,13 +303,25 @@
       &:hover {
         color: $dark;
         background-color: $white-color;
+        @include dark-mode {
+          background: rgba(143, 214, 143, 0.1);
+          color: $dark-mode-text;
+        }
       }
       &.is-active {
         box-shadow: 0 0 0 rgba(132, 135, 138, 0.5);
         transform: translateY(1px);
         color: $secondary-color;
+        @include dark-mode {
+          box-shadow: 0 0 0 transparent;
+          color: #a8e6a8;
+          background: rgba(143, 214, 143, 0.15);
+        }
         &:hover {
           background-color: $background;
+          @include dark-mode {
+            background: rgba(143, 214, 143, 0.2);
+          }
         }
       }
       &:first-child {
@@ -331,7 +403,7 @@
     margin-top: 12px;
     
     .c-search__text {
-      padding: 8px 8px 8px 35px;
+      padding: 8px 12px;
       font-size: 14px;
     }
   }
@@ -344,6 +416,10 @@
     width: 100%;
     background-color: #fbfbfb;
     border-bottom: 1px solid $gray-lighten;
+    @include dark-mode {
+      background: linear-gradient(180deg, rgba(26, 29, 40, 0.95) 0%, rgba(13, 15, 18, 0.95) 100%);
+      border-bottom-color: rgba(143, 214, 143, 0.15);
+    }
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
@@ -417,15 +493,9 @@
   .c-search {
     margin-top: 10px;
     
-    .c-search__box {
-      > div[data-icon] {
-        top: 6px;
-        left: 10px;
-      }
-    }
     
     .c-search__text {
-      padding: 6px 6px 6px 32px;
+      padding: 6px 10px;
       font-size: 13px;
       border-radius: 20px;
     }

@@ -9,12 +9,50 @@ permalink: /404.html
     margin: 10px auto;
     max-width: 600px;
     text-align: center;
+    padding: 40px 20px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    transition: all 0.3s ease;
   }
+
+  [data-theme="dark"] .container {
+    background: linear-gradient(135deg, rgba(26, 35, 50, 0.4) 0%, rgba(36, 41, 50, 0.5) 100%);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+
   h1 {
     margin: 30px 0;
     font-size: 60px;
     line-height: 1;
     letter-spacing: -1px;
+    color: #333333;
+    transition: color 0.3s ease;
+  }
+
+  [data-theme="dark"] h1 {
+    color: #e2e6eb;
+  }
+
+  p {
+    color: #666666;
+    transition: color 0.3s ease;
+  }
+
+  [data-theme="dark"] p {
+    color: #a8aeb8;
+  }
+
+  a {
+    color: #4a90e2;
+    transition: all 0.3s ease;
+  }
+
+  [data-theme="dark"] a {
+    color: #81c9f9;
+  }
+
+  [data-theme="dark"] a:hover {
+    color: #a8e6a8;
   }
 </style>
 
@@ -25,7 +63,6 @@ permalink: /404.html
         <div class="c-search__box">
           <label for="js-search-input" class="u-screen-reader-text">Search for Blog</label>
           <input type="text" id="js-search-input" class="c-search__text" autocomplete="off" placeholder="Type to search...">
-          <div data-icon='ei-search' data-size='s'></div>
         </div>
         <ul id="js-results-container" class="c-search-results-list"></ul>
       </div>

@@ -20,6 +20,8 @@ h6 {
   font-family: $heading-font-family;
   font-weight: $heading-font-weight;
   line-height: initial;
+  @include dark-mode-text;
+  @include theme-transition;
 }
 
 /* Desktop (default) */

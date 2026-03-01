@@ -10,11 +10,21 @@ body {
   background-color: $background;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  @include theme-transition;
+
+  @include dark-mode {
+    color: $dark-mode-text;
+    background-color: $dark-mode-bg;
+  }
 }
 
 *::selection {
   color: $white-color;
   background-color: $primary-color;
+
+  @include dark-mode {
+    background-color: $dark-mode-link;
+  }
 }
 
 /* Responsive Body Typography */

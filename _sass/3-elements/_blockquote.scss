@@ -4,13 +4,28 @@
 
 blockquote {
   padding-left: $base-spacing-unit;
-  border-left: 3px solid $primary-color;
+  border-left: 4px solid $primary-color;
   font-family: 'Volkhov', 'Times New Roman', Times, serif;
-  font-style: normal;
+  font-style: italic;
   font-size: 18px;
-  background-color: rgba(220, 235, 245, 0.2);
+  background-color: $light-blockquote-bg;
+  @include theme-transition;
+  position: relative;
+  padding: $base-spacing-unit;
+  padding-left: 20px;
+  margin: 20px 0;
+  border-radius: 4px;
+  
+  @include dark-mode {
+    border-left-color: $dark-mode-blockquote-border;
+    background: linear-gradient(135deg, rgba(85, 107, 47, 0.08) 0%, rgba(143, 214, 143, 0.05) 100%);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
   p {
-    padding: 10px;
+    padding: 5px 0;
+    margin: 0;
+    @include dark-mode-text;
   }
 }
 

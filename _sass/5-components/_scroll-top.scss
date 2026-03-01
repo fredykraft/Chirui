@@ -13,6 +13,9 @@
 	right: -100px;
 	z-index: 10;
   opacity: .5;
+  @include dark-mode {
+    color: #a8aeb8;
+  }
 
   &--active {
     right: 15px;
@@ -21,5 +24,8 @@
   &:hover {
     color: $gray-dark;
 		opacity: 1;
+    @include dark-mode {
+      color: #8fd68f;
+    }
   }
 }

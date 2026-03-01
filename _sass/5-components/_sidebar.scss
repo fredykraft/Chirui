@@ -15,6 +15,12 @@
   text-align: center;
   box-shadow: 1px 1px 0 rgba(31, 35, 46, 0.15);
   background-color: $white-color;
+  @include theme-transition;
+
+  @include dark-mode {
+    background: linear-gradient(180deg, $dark-mode-bg-secondary 0%, rgba(21, 29, 40, 0.4) 100%);
+    box-shadow: inset -1px 0 0 rgba(143, 214, 143, 0.1), 1px 1px 0 rgba(0, 0, 0, 0.4);
+  }
 }
 
 .c-sidebar-author {
@@ -53,11 +59,15 @@
     font-size: 18px;
     font-weight: 700;
     line-height: 21px;
+    @include dark-mode-text(#333, $dark-mode-text);
   }
   .c-author__job {
     font-size: 12px;
     color: $gray;
     margin: 5px 0 0;
+    @include dark-mode {
+      color: $dark-mode-text-secondary;
+    }
   }
   .c-contact-menu {
     margin: 30px 0;
@@ -69,6 +79,7 @@
     max-width: 400px;
     margin: 0 auto 15px;
     font-size: 13px;
+    @include dark-mode-text;
   }
 }
 
@@ -79,6 +90,9 @@
     font-size: 15px;
     font-weight: 700;
     color: $darkest;
+    @include dark-mode {
+      color: $dark-mode-text;
+    }
     &::before {
       content: "";
       display: block;
@@ -89,6 +103,9 @@
       top: 50%;
       left: 0;
       background-color: $darkest;
+      @include dark-mode {
+        background-color: $dark-mode-text;
+      }
     }
     &::after {
       content: "";

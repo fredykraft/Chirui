@@ -12,17 +12,24 @@
   padding: 8px 15px;
   cursor: pointer;
   transition: $global-transition;
+  @include theme-transition;
 
   &--primary {
     color: $white-color;
     background-color: $primary-color;
     background: linear-gradient(135deg, #33aaff 0%, #62d5ff 100%);
+    @include dark-mode {
+      background: linear-gradient(135deg, #4a8a3a 0%, #6ba05a 100%);
+    }
   }
 
   &--secondary {
     color: $white-color;
     background-color: $secondary-color;
     background: linear-gradient(135deg, #a2a2bd 0%,#cfcfdd 100%);
+    @include dark-mode {
+      background: linear-gradient(135deg, #7a7a95 0%, #9a9aa8 100%);
+    }
   }
 
   &--round {
@@ -31,8 +38,14 @@
 
   &--shadow {
     box-shadow: 8px 10px 20px 0 rgba(46, 61, 73, .15);
+    @include dark-mode {
+      box-shadow: 8px 10px 20px 0 rgba(0, 0, 0, .4);
+    }
     &:hover {
       box-shadow: 2px 4px 8px 0px rgba(46, 61, 73, 0.2);
+      @include dark-mode {
+        box-shadow: 2px 4px 8px 0px rgba(0, 0, 0, .5);
+      }
     }
   }
 
@@ -50,10 +63,19 @@
   &:hover {
     color: $white-color;
     transition: $global-transition;
+    transform: translateY(-2px);
   }
 
   &:active {
     transform: translateY(2px);
+  }
+
+  &:focus {
+    outline: 2px solid $primary-color;
+    outline-offset: 2px;
+    @include dark-mode {
+      outline-color: $dark-mode-focus-ring;
+    }
   }
 }
 

@@ -6,9 +6,24 @@ a {
     text-decoration: none;
     color: $link-color;
     transition: $global-transition;
+    @include theme-transition;
+
+    @include dark-mode {
+      color: $dark-mode-link;
+    }
 
     &:hover {
         color: $link-color-hover;
+        @include dark-mode {
+          color: $dark-mode-link-hover;
+        }
     }
 
+    &:focus {
+      outline: 2px solid $primary-color;
+      outline-offset: 2px;
+      @include dark-mode {
+        outline-color: $dark-mode-focus-ring;
+      }
+    }
 }

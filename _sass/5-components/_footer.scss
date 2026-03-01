@@ -7,6 +7,13 @@
   background-color: #f8f9fa;
   border-top: 1px solid #e0e0e0;
   margin-top: 60px;
+  @include theme-transition;
+
+  @include dark-mode {
+    background: linear-gradient(180deg, $dark-mode-bg-secondary 0%, rgba(21, 29, 40, 0.6) 100%);
+    border-top: 1px solid $dark-mode-border;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
 
   .c-footer__content {
     max-width: 1200px;
@@ -14,6 +21,9 @@
     padding: 40px 20px;
     text-align: center;
     color: #a0a0a0;
+    @include dark-mode {
+      color: $dark-mode-text-muted;
+    }
   }
 
   .c-footer__donation {
@@ -24,6 +34,12 @@
       font-size: 18px;
       font-weight: 700;
       margin: 0 0 8px 0;
+      @include dark-mode {
+        background: linear-gradient(135deg, #8fd68f 0%, #a8e6a8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
     }
 
     .c-footer__donation-info {
@@ -31,17 +47,26 @@
       font-size: 14px;
       font-weight: 500;
       margin: 0;
+      @include dark-mode {
+        color: $dark-mode-text-secondary;
+      }
     }
   }
 
   .c-footer__copyright {
     padding-top: 20px;
     border-top: 1px solid #e0e0e0;
+    @include dark-mode {
+      border-top: 1px solid rgba(143, 214, 143, 0.2);
+    }
 
     p {
       margin: 0;
       font-size: 14px;
       color: #888;
+      @include dark-mode {
+        color: $dark-mode-text-muted;
+      }
     }
   }
 }

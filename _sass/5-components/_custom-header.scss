@@ -10,18 +10,32 @@
     color: $primary-color;
     font-weight: 700;
     transition: background .12s, color .12s, box-shadow .12s;
+    @include dark-mode {
+      border-color: rgba(143, 214, 143, 0.3);
+      color: $dark-mode-text;
+    }
   }
 
   .c-nav__list .c-nav__item a:hover{
     background: rgba($primary-color, 0.06);
     color: darken($primary-color, 6%);
     box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    @include dark-mode {
+      background: rgba(143, 214, 143, 0.1);
+      color: #a8e6a8;
+      box-shadow: 0 6px 18px rgba(143, 214, 143, 0.1);
+    }
   }
 
   .c-nav__item.is-active a{
     background: rgba($primary-color, 0.12);
     color: darken($primary-color, 8%);
     box-shadow: inset 0 -3px 0 rgba(0,0,0,0.04);
+    @include dark-mode {
+      background: rgba(143, 214, 143, 0.15);
+      color: #a8e6a8;
+      box-shadow: inset 0 -3px 0 rgba(143, 214, 143, 0.3);
+    }
   }
 
   @media (max-width: 900px){

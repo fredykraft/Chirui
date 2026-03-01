@@ -55,16 +55,46 @@
     `;
     document.body.appendChild(darkModeToggle);
 
-    // Load saved preference
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
+    // Detect system preference and load saved preference
+    function initTheme() {
+      let theme = localStorage.getItem('theme');
+      
+      // If no saved preference, detect system preference
+      if (!theme) {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        theme = prefersDark ? 'dark' : 'light';
+      }
+      
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.style.colorScheme = theme;
+    }
+
+    // Initialize theme on load
+    initTheme();
+
+    // Listen to system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+      // Only apply system theme if user hasn't manually set a preference
+      if (!localStorage.getItem('theme')) {
+        const newTheme = e.matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        document.documentElement.style.colorScheme = newTheme;
+      }
+    });
 
     darkModeToggle.addEventListener('click', function() {
       const currentTheme = document.documentElement.getAttribute('data-theme');
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
       
       document.documentElement.setAttribute('data-theme', newTheme);
+      document.documentElement.style.colorScheme = newTheme;
       localStorage.setItem('theme', newTheme);
+      
+      // Add animation class
+      darkModeToggle.classList.add('toggle-active');
+      setTimeout(() => {
+        darkModeToggle.classList.remove('toggle-active');
+      }, 600);
       
       // Track theme change
       if (window.siteTrackEvent) {

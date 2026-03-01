@@ -1,0 +1,67 @@
+/* ===============
+   DARK MODE MIXIN
+=============== */
+
+/**
+ * Dark Mode Mixin - Wrapper for dark mode-specific styles
+ * Usage: @include dark-mode { color: white; }
+ */
+@mixin dark-mode {
+  [data-theme="dark"] & {
+    @content;
+  }
+}
+
+/**
+ * System Preference Dark Mode Mixin
+ * Usage: @include system-dark-mode { color: white; }
+ */
+@mixin system-dark-mode {
+  @media (prefers-color-scheme: dark) {
+    @content;
+  }
+}
+
+/**
+ * Smooth Transition Mixin for Theme Changes
+ * Applies smooth color/background transitions
+ */
+@mixin theme-transition {
+  transition: background-color 0.3s ease, 
+              color 0.3s ease, 
+              border-color 0.3s ease,
+              box-shadow 0.3s ease;
+}
+
+/**
+ * Dark Mode Text Color Mixin
+ * Automatically switches text color based on theme
+ */
+@mixin dark-mode-text($light: $light-text, $dark: $dark-mode-text) {
+  color: $light;
+  @include dark-mode {
+    color: $dark;
+  }
+}
+
+/**
+ * Dark Mode Background Mixin
+ * Automatically switches background based on theme
+ */
+@mixin dark-mode-bg($light: white, $dark: $dark-mode-bg) {
+  background-color: $light;
+  @include dark-mode {
+    background-color: $dark;
+  }
+}
+
+/**
+ * Dark Mode Border Mixin
+ * Automatically switches border color based on theme
+ */
+@mixin dark-mode-border($light: $light-border, $dark: $dark-mode-border) {
+  border-color: $light;
+  @include dark-mode {
+    border-color: $dark;
+  }
+}
