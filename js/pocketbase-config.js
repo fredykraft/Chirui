@@ -1,12 +1,18 @@
 /**
  * PocketBase Configuration
  * 
- * Production URL: https://chirui-huang.pockethost.io/
- * This enables forms to work on the public GitHub Pages website.
+ * SECURITY: This file configures the PocketBase API endpoint for the public website.
+ * The endpoint must be HTTPS in production to protect data in transit.
  * 
- * For local development: Keep this uncommented, it will use this URL
- * To switch back to localhost: Comment out the line below
+ * DO NOT hardcode sensitive backend URLs - use environment variables instead.
+ * Set POCKETBASE_URL in your deployment environment.
  */
 
-// PRODUCTION: PocketBase URL for public site
-window.POCKETBASE_URL = 'https://chirui-huang.pockethost.io';
+(function() {
+  'use strict';
+  
+  // Only set default if not already configured
+  if (!window.POCKETBASE_URL) {
+    window.POCKETBASE_URL = 'https://chirui-huang.pockethost.io';
+  }
+})();

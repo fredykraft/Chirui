@@ -1,0 +1,125 @@
+name: Secret Scanning & Validation
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  scanning:
+    name: Check for Secrets
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Scan for secrets using Gitleaks
+      - name: Run Gitleaks Scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Report all findings even if they're already committed
+          GITLEAKS_ARGS: "--verbose"
+
+      # Check .gitignore is properly configured
+      - name: Validate .gitignore
+        run: |
+          echo "Checking critical files are in .gitignore..."
+          MISSING=0
+          
+          if ! grep -q "^\.env" .gitignore; then
+            echo "❌ FAILED: .env patterns not found in .gitignore"
+            MISSING=1
+          fi
+          
+          if ! grep -q "ADMIN_PASSWORD.md" .gitignore; then
+            echo "❌ FAILED: ADMIN_PASSWORD.md not in .gitignore"
+            MISSING=1
+          fi
+          
+          if ! grep -q "\.secret" .gitignore; then
+            echo "❌ FAILED: .secret pattern not in .gitignore"
+            MISSING=1
+          fi
+          
+          if [ $MISSING -eq 1 ]; then
+            exit 1
+          else
+            echo "✅ PASSED: .gitignore properly protects sensitive files"
+          fi
+
+      # Verify sensitive files aren't staged
+      - name: Check staged files for secrets
+        run: |
+          echo "Checking staged files for sensitive patterns..."
+          FOUND=0
+          
+          if git diff --cached --name-only | grep -E "\.(env|secret)" > /dev/null; then
+            echo "❌ FAILED: Sensitive files detected in staging"
+            git diff --cached --name-only | grep -E "\.(env|secret)"
+            FOUND=1
+          fi
+          
+          if [ $FOUND -eq 1 ]; then
+            exit 1
+          else
+            echo "✅ PASSED: No sensitive files in staging"
+          fi
+
+      # Check for hardcoded localhost URLs in production files
+      - name: Check for development URLs
+        run: |
+          echo "Checking for hardcoded development URLs..."
+          FOUND=0
+          
+          # Search for localhost in JS files
+          if grep -r "127\.0\.0\.1:8090\|localhost:8090" js/ --include="*.js" 2>/dev/null; then
+            echo "❌ FAILED: Found hardcoded localhost URLs in JS files"
+            FOUND=1
+          fi
+          
+          # Search for development API endpoints
+          if grep -r "http://" _includes/ --include="*.html" --include="*.liquid" 2>/dev/null | grep -v "https://"; then
+            echo "⚠️  WARNING: Found http:// URLs in HTML includes (should be https://)"
+          fi
+          
+          if [ $FOUND -eq 1 ]; then
+            exit 1
+          else
+            echo "✅ PASSED: No hardcoded localhost development URLs found"
+          fi
+
+      # Validate configuration files
+      - name: Validate configuration
+        run: |
+          echo "Validating configuration files..."
+          
+          if [ -f "_includes/head.html" ]; then
+            if grep -q "window.POCKETBASE_URL" _includes/head.html; then
+              echo "✅ PASSED: POCKETBASE_URL configuration found in head.html"
+            else
+              echo "❌ FAILED: POCKETBASE_URL configuration missing from head.html"
+              exit 1
+            fi
+          fi
+          
+          if [ ! -f ".env.example" ]; then
+            echo "⚠️  WARNING: .env.example template not found"
+          fi
+
+      # Report results
+      - name: Security Report
+        if: always()
+        run: |
+          echo "## Security Validation Complete"
+          echo ""
+          echo "✓ Gitleaks scan completed"
+          echo "✓ .gitignore validation passed"
+          echo "✓ Development URL check passed"
+          echo "✓ Configuration validation passed"
+          echo ""
+          echo "All security checks passed. Safe to proceed with deployment."

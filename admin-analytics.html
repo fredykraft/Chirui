@@ -1,0 +1,639 @@
+---
+layout: default
+title: "Admin Analytics Dashboard"
+---
+
+<style>
+  .admin-container {
+    max-width: 1400px;
+    margin: 40px auto;
+    padding: 20px;
+  }
+  
+  .login-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #556B2F 0%, #3d4d23 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+  }
+  
+  .login-box {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    max-width: 400px;
+    width: 90%;
+    border: 3px solid #D3D3B0;
+  }
+  
+  .login-box h2 {
+    color: #556B2F;
+    margin-top: 0;
+    font-family: 'Volkhov', serif;
+    text-align: center;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .form-group label {
+    color: #404040;
+    font-weight: 600;
+    font-family: 'Open Sans', sans-serif;
+  }
+  
+  .form-group input {
+    padding: 12px;
+    border: 2px solid #D3D3B0;
+    border-radius: 6px;
+    font-size: 15px;
+    font-family: 'Open Sans', sans-serif;
+  }
+  
+  .form-group input:focus {
+    outline: none;
+    border-color: #556B2F;
+  }
+  
+  .login-btn {
+    padding: 14px;
+    background: #556B2F;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Open Sans', sans-serif;
+  }
+  
+  .login-btn:hover {
+    background: #3d4d23;
+    transform: translateY(-2px);
+  }
+  
+  .error-msg {
+    color: #d32f2f;
+    font-size: 14px;
+    text-align: center;
+    display: none;
+  }
+  
+  .dashboard-content {
+    display: none;
+  }
+  
+  .dashboard-header {
+    background: linear-gradient(135deg, #556B2F 0%, #3d4d23 100%);
+    padding: 30px;
+    border-radius: 12px;
+    color: white;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .dashboard-header h1 {
+    margin: 0;
+    color: #D3D3B0;
+    font-family: 'Volkhov', serif;
+  }
+  
+  .logout-btn {
+    padding: 10px 20px;
+    background: #D3D3B0;
+    color: #404040;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  
+  .logout-btn:hover {
+    background: #e8ead8;
+  }
+  
+  .analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  
+  .metric-card {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(85, 107, 47, 0.15);
+    border: 2px solid #e8ead8;
+    transition: all 0.3s ease;
+  }
+  
+  .metric-card:hover {
+    border-color: #556B2F;
+    box-shadow: 0 4px 16px rgba(85, 107, 47, 0.25);
+  }
+  
+  .metric-label {
+    font-size: 14px;
+    color: #404040;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  
+  .metric-value {
+    font-size: 42px;
+    color: #556B2F;
+    font-weight: bold;
+    margin: 5px 0;
+  }
+  
+  .metric-subtext {
+    font-size: 13px;
+    color: #757575;
+  }
+  
+  .section-card {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(85, 107, 47, 0.15);
+    border: 2px solid #e8ead8;
+    margin-bottom: 25px;
+  }
+  
+  .section-card h2 {
+    color: #556B2F;
+    margin-top: 0;
+    font-family: 'Volkhov', serif;
+    border-bottom: 2px solid #D3D3B0;
+    padding-bottom: 15px;
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+  
+  .action-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-family: 'Open Sans', sans-serif;
+  }
+  
+  .btn-primary {
+    background: #556B2F;
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background: #3d4d23;
+    transform: translateY(-2px);
+  }
+  
+  .btn-secondary {
+    background: transparent;
+    color: #556B2F;
+    border: 2px solid #556B2F;
+  }
+  
+  .btn-secondary:hover {
+    background: #556B2F;
+    color: white;
+  }
+  
+  .data-viewer {
+    background: #3d4d23;
+    color: #e8ead8;
+    padding: 20px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    overflow-x: auto;
+    max-height: 600px;
+    overflow-y: auto;
+    border: 2px solid #556B2F;
+  }
+  
+  .data-viewer pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+  
+  .data-table th {
+    background: #556B2F;
+    color: white;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+  }
+  
+  .data-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e8ead8;
+    color: #404040;
+  }
+  
+  .data-table tr:hover {
+    background: #f9f9f9;
+  }
+  
+  .alert-box {
+    background: #e8ead8;
+    border-left: 4px solid #556B2F;
+    padding: 15px 20px;
+    margin: 20px 0;
+    border-radius: 4px;
+  }
+  
+  .alert-box strong {
+    color: #556B2F;
+  }
+</style>
+
+<div id="login-overlay" class="login-overlay">
+  <div class="login-box">
+    <h2>★ Admin Login</h2>
+    <form class="login-form" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label for="admin-password">Password</label>
+        <input type="password" id="admin-password" placeholder="Enter admin password" required>
+      </div>
+      <button type="submit" class="login-btn">Login</button>
+      <div id="error-msg" class="error-msg">Incorrect password. Please try again.</div>
+    </form>
+    <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #e8ead8;">
+      <p style="font-size: 13px; color: #757575; text-align: center; margin: 10px 0;">
+        <strong>Authorized Access Only</strong>
+      </p>
+      <p style="font-size: 12px; color: #a0a0a0; text-align: center; margin: 5px 0;">
+        Contact the website administrator if you need access.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div id="dashboard-content" class="admin-container dashboard-content">
+  <div class="dashboard-header">
+    <h1>★ Analytics Dashboard</h1>
+    <button class="logout-btn" onclick="handleLogout()">Logout</button>
+  </div>
+  
+  <!-- Key Metrics -->
+  <div class="analytics-grid" id="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-label">Visitor ID</div>
+      <div class="metric-value" style="font-size: 16px;" id="metric-visitor-id">—</div>
+      <div class="metric-subtext">Unique identifier</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Total Visits</div>
+      <div class="metric-value" id="metric-visits">0</div>
+      <div class="metric-subtext">All-time visits</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Time on Site</div>
+      <div class="metric-value" id="metric-time">0</div>
+      <div class="metric-subtext">Total seconds</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Pages Viewed</div>
+      <div class="metric-value" id="metric-pages">0</div>
+      <div class="metric-subtext">Unique page views</div>
+    </div>
+  </div>
+
+  <div class="alert-box">
+    <strong>Note:</strong> This dashboard shows data stored in YOUR browser's cookies as a demo. To collect data from all visitors, you need to implement server-side tracking (see documentation below).
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="section-card">
+    <h2>★ Data Export & Actions</h2>
+    <div class="action-buttons">
+      <button class="action-btn btn-primary" onclick="exportAllData()">★ Export Full JSON</button>
+      <button class="action-btn btn-primary" onclick="exportCSV()">★ Export as CSV</button>
+      <button class="action-btn btn-secondary" onclick="refreshDashboard()">★ Refresh Data</button>
+      <button class="action-btn btn-secondary" onclick="viewRawData()">★ View Raw Data</button>
+      <button class="action-btn btn-secondary" onclick="clearAdminData()">★ Clear Test Data</button>
+    </div>
+  </div>
+
+  <!-- Page Views Table -->
+  <div class="section-card">
+    <h2>★ Recent Page Views</h2>
+    <div id="page-views-table"></div>
+  </div>
+
+  <!-- Activities Table -->
+  <div class="section-card">
+    <h2>⚡ Activity Summary</h2>
+    <div id="activities-table"></div>
+  </div>
+
+  <!-- Custom Events -->
+  <div class="section-card">
+    <h2>★ Custom Events</h2>
+    <div id="events-table"></div>
+  </div>
+
+  <!-- Raw Data Viewer -->
+  <div class="section-card" id="raw-data-section" style="display: none;">
+    <h2>★ Raw Data (JSON)</h2>
+    <div class="data-viewer" id="raw-data-viewer"></div>
+  </div>
+
+  <!-- Server Integration Guide -->
+  <div class="section-card">
+    <h2>★ Server-Side Integration Guide</h2>
+    <p>To collect data from ALL visitors (not just your own browser), add this code to <code>activity-tracker.js</code>:</p>
+    
+    <div class="data-viewer">
+<pre>// Add to the saveCurrentPageData() function:
+function saveCurrentPageData() {
+  if (!config.enabled || !state.pageLoadTime) return;
+
+  var timeSpent = Math.round((state.lastActivityTime - state.pageLoadTime) / 1000);
+  
+  var pageActivity = {
+    path: window.location.pathname,
+    url: window.location.href,
+    title: document.title,
+    sessionId: state.sessionId,
+    visitorId: state.visitorId,
+    timeSpent: timeSpent,
+    scrollDepth: state.scrollDepth,
+    clicks: state.clicks.length,
+    clickDetails: state.clicks.slice(-10),
+    timestamp: new Date().toISOString()
+  };
+
+  // Send to your server
+  sendToServer(pageActivity);
+  
+  // ... rest of existing code
+}
+
+// Add this new function:
+function sendToServer(data) {
+  // Replace with your server endpoint
+  var endpoint = '/api/track-activity';
+  
+  fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+    keepalive: true // Ensures data is sent even if page is closing
+  }).catch(function(error) {
+    console.error('Analytics error:', error);
+  });
+}</pre>
+    </div>
+    
+    <p style="margin-top: 20px;"><strong>Server Endpoint Examples:</strong></p>
+    <ul>
+      <li><strong>External Services:</strong> Google Analytics, Mixpanel, Plausible</li>
+      <li><strong>Self-hosted:</strong> Set up a simple Node.js/Python/PHP endpoint</li>
+      <li><strong>Firebase:</strong> Use Firestore to store analytics data</li>
+      <li><strong>Google Sheets:</strong> Use Google Apps Script as endpoint</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+// Admin authentication
+// Password hash should be configured locally and kept out of public repositories.
+var ADMIN_PASSWORD_HASH = 'YOUR_BASE64_ENCODED_PASSWORD';
+var SESSION_KEY = 'admin_session';
+var SESSION_TIMEOUT = 3600000; // 1 hour in milliseconds
+
+function handleLogin(event) {
+  event.preventDefault();
+  var password = document.getElementById('admin-password').value;
+  
+  // Check against pre-configured password
+  if (btoa(password) === ADMIN_PASSWORD_HASH) {
+    var loginTime = new Date().getTime();
+    sessionStorage.setItem(SESSION_KEY, 'authenticated');
+    sessionStorage.setItem('login_time', loginTime);
+    showDashboard();
+  } else {
+    document.getElementById('error-msg').style.display = 'block';
+    // Clear the password field
+    document.getElementById('admin-password').value = '';
+  }
+}
+
+function handleLogout() {
+  sessionStorage.removeItem(SESSION_KEY);
+  location.reload();
+}
+
+function showDashboard() {
+  document.getElementById('login-overlay').style.display = 'none';
+  document.getElementById('dashboard-content').style.display = 'block';
+  loadDashboardData();
+}
+
+function checkAuthentication() {
+  var isAuthenticated = sessionStorage.getItem(SESSION_KEY) === 'authenticated';
+  var loginTime = parseInt(sessionStorage.getItem('login_time') || '0');
+  var currentTime = new Date().getTime();
+  
+  // Check if session has expired
+  if (isAuthenticated && (currentTime - loginTime < SESSION_TIMEOUT)) {
+    showDashboard();
+  } else if (isAuthenticated) {
+    // Session expired
+    sessionStorage.removeItem(SESSION_KEY);
+    sessionStorage.removeItem('login_time');
+    alert('Session expired. Please login again.');
+  }
+}
+
+function loadDashboardData() {
+  if (typeof ActivityTracker === 'undefined') {
+    setTimeout(loadDashboardData, 500);
+    return;
+  }
+  
+  refreshDashboard();
+}
+
+function refreshDashboard() {
+  var stats = ActivityTracker.getStats();
+  
+  // Update metrics
+  document.getElementById('metric-visitor-id').textContent = 
+    stats.visitorId || 'Not set';
+  document.getElementById('metric-visits').textContent = 
+    stats.visitCount || 0;
+  document.getElementById('metric-time').textContent = 
+    (stats.totalTimeSpent || 0) + 's';
+  document.getElementById('metric-pages').textContent = 
+    stats.pageViews ? stats.pageViews.length : 0;
+  
+  // Render tables
+  renderPageViewsTable(stats.pageViews || []);
+  renderActivitiesTable(stats.activities || []);
+  renderEventsTable(stats.customEvents || []);
+}
+
+function renderPageViewsTable(pageViews) {
+  var html = '<table class="data-table"><thead><tr>' +
+    '<th>Timestamp</th><th>Page</th><th>Title</th><th>Referrer</th>' +
+    '</tr></thead><tbody>';
+  
+  pageViews.slice(-20).reverse().forEach(function(view) {
+    html += '<tr>' +
+      '<td>' + new Date(view.timestamp).toLocaleString() + '</td>' +
+      '<td>' + view.path + '</td>' +
+      '<td>' + view.title + '</td>' +
+      '<td>' + (view.referrer || 'Direct') + '</td>' +
+      '</tr>';
+  });
+  
+  html += '</tbody></table>';
+  document.getElementById('page-views-table').innerHTML = html;
+}
+
+function renderActivitiesTable(activities) {
+  var html = '<table class="data-table"><thead><tr>' +
+    '<th>Page</th><th>Time Spent</th><th>Scroll Depth</th><th>Clicks</th><th>Timestamp</th>' +
+    '</tr></thead><tbody>';
+  
+  activities.slice(-20).reverse().forEach(function(activity) {
+    html += '<tr>' +
+      '<td>' + activity.path + '</td>' +
+      '<td>' + activity.timeSpent + 's</td>' +
+      '<td>' + activity.scrollDepth + '%</td>' +
+      '<td>' + activity.clicks + '</td>' +
+      '<td>' + new Date(activity.timestamp).toLocaleString() + '</td>' +
+      '</tr>';
+  });
+  
+  html += '</tbody></table>';
+  document.getElementById('activities-table').innerHTML = html;
+}
+
+function renderEventsTable(events) {
+  var html = '<table class="data-table"><thead><tr>' +
+    '<th>Event Name</th><th>Page</th><th>Data</th><th>Timestamp</th>' +
+    '</tr></thead><tbody>';
+  
+  events.slice(-20).reverse().forEach(function(event) {
+    html += '<tr>' +
+      '<td><strong>' + event.name + '</strong></td>' +
+      '<td>' + event.page + '</td>' +
+      '<td>' + JSON.stringify(event.data) + '</td>' +
+      '<td>' + new Date(event.timestamp).toLocaleString() + '</td>' +
+      '</tr>';
+  });
+  
+  html += '</tbody></table>';
+  document.getElementById('events-table').innerHTML = html;
+}
+
+function exportAllData() {
+  var stats = ActivityTracker.getStats();
+  var jsonStr = JSON.stringify(stats, null, 2);
+  var blob = new Blob([jsonStr], {type: 'application/json'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'analytics-export-' + new Date().toISOString().split('T')[0] + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  alert('✅ Data exported successfully!');
+}
+
+function exportCSV() {
+  var stats = ActivityTracker.getStats();
+  var csv = 'Page,Time Spent (s),Scroll Depth (%),Clicks,Timestamp\n';
+  
+  (stats.activities || []).forEach(function(activity) {
+    csv += '"' + activity.path + '",' +
+      activity.timeSpent + ',' +
+      activity.scrollDepth + ',' +
+      activity.clicks + ',' +
+      '"' + activity.timestamp + '"\n';
+  });
+  
+  var blob = new Blob([csv], {type: 'text/csv'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'analytics-export-' + new Date().toISOString().split('T')[0] + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  alert('✅ CSV exported successfully!');
+}
+
+function viewRawData() {
+  var section = document.getElementById('raw-data-section');
+  var viewer = document.getElementById('raw-data-viewer');
+  
+  if (section.style.display === 'none') {
+    var stats = ActivityTracker.getStats();
+    viewer.innerHTML = '<pre>' + JSON.stringify(stats, null, 2) + '</pre>';
+    section.style.display = 'block';
+    section.scrollIntoView({behavior: 'smooth'});
+  } else {
+    section.style.display = 'none';
+  }
+}
+
+function clearAdminData() {
+  if (confirm('⚠️ This will clear all tracking data. Are you sure?')) {
+    ActivityTracker.clearData();
+    refreshDashboard();
+    alert('✅ All data cleared!');
+  }
+}
+
+// Check auth on load
+document.addEventListener('DOMContentLoaded', checkAuthentication);
+</script>

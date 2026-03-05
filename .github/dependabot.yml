@@ -1,0 +1,46 @@
+version: 2
+updates:
+  # Enable version updates for dependencies in Gemfile (Ruby/Jekyll)
+  - package-ecosystem: "bundler"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "03:00"  # 3 AM UTC
+    # Automatically merge Dependabot PRs for patch and minor updates
+    auto-merge:
+      enabled: true
+      merge-method: "squash"
+    pull-request-branch-name:
+      separator: "/"
+    # Commit message prefix
+    commit-message:
+      prefix: "deps:"
+      include: "scope"
+
+  # Enable version updates for npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "03:30"  # 3:30 AM UTC
+    auto-merge:
+      enabled: true
+      merge-method: "squash"
+    pull-request-branch-name:
+      separator: "/"
+    commit-message:
+      prefix: "deps:"
+      include: "scope"
+
+  # GitHub Actions workflow updates
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "04:00"  # 4 AM UTC
+    auto-merge:
+      enabled: true
+      merge-method: "squash"
+    commit-message:
+      prefix: "ci:"
+      include: "scope"

@@ -344,6 +344,11 @@
                 <a href="#" class="card-link" onclick="openEditModal('profile'); return false;">Edit Profile →</a>
             </div>
             <div class="card">
+                <h3>🌍 Location & Language</h3>
+                <p>Set your location to enable automatic language adaptation</p>
+                <a href="#" class="card-link" onclick="openEditModal('location'); return false;">Set Location →</a>
+            </div>
+            <div class="card">
                 <h3>🔒 Password</h3>
                 <p>Change your password to keep your account secure</p>
                 <a href="#" class="card-link" onclick="openEditModal('password'); return false;">Change Password →</a>
@@ -366,6 +371,11 @@
             <div class="info-row">
                 <span class="info-label">Full Name</span>
                 <span class="info-value" id="infoFullname">-</span>
+            </div>
+
+            <div class="info-row">
+                <span class="info-label">Location</span>
+                <span class="info-value" id="infoLocation">-</span>
             </div>
 
             <div class="info-row">
@@ -397,6 +407,17 @@
             <div class="form-group">
                 <label for="newFullname">Full Name</label>
                 <input type="text" id="newFullname" placeholder="Your full name">
+            </div>
+        </div>
+
+        <div id="locationModal" class="modal-form" style="display: none;">
+            <div class="form-group">
+                <label for="newLocation">Location (City Name)</label>
+                <input type="text" id="newLocation" placeholder="e.g., Shanghai, Beijing, Taipei, etc.">
+                <small style="color: #666; display: block; margin-top: 8px;">
+                  Your location will be used to automatically set your preferred language. 
+                  For example, setting Shanghai will automatically use Simplified Chinese.
+                </small>
             </div>
         </div>
 
@@ -460,6 +481,11 @@
         document.getElementById('infoUsername').textContent = user.username;
         document.getElementById('infoEmail').textContent = user.email;
         document.getElementById('infoFullname').textContent = user.fullname || '-';
+        
+        // Load location from localStorage
+        const location = window.siteLanguageManager ? window.siteLanguageManager.getLocation() : null;
+        document.getElementById('infoLocation').textContent = location || '-';
+        
         document.getElementById('infoVerified').textContent = user.verified ? '✓ Verified' : '⚠ Unverified';
         
         if (user.created) {
@@ -471,6 +497,7 @@
     function openEditModal(mode) {
         currentEditMode = mode;
         const modal = document.getElementById('editModal');
+        const user = userAuth.getCurrentUser();
         
         // Hide all forms
         document.querySelectorAll('.modal-form').forEach(el => el.style.display = 'none');
@@ -478,10 +505,19 @@
         // Show relevant form
         document.getElementById(mode + 'Modal').style.display = 'block';
         
+        // Pre-fill form if editing existing data
+        if (mode === 'profile' && user) {
+            document.getElementById('newFullname').value = user.fullname || '';
+        } else if (mode === 'location') {
+            const location = window.siteLanguageManager ? window.siteLanguageManager.getLocation() : null;
+            document.getElementById('newLocation').value = location || '';
+        }
+        
         // Update modal title
         const titles = {
             email: 'Update Email Address',
             profile: 'Edit Profile',
+            location: 'Set Location & Language',
             password: 'Change Password'
         };
         document.getElementById('modalTitle').textContent = titles[mode];
@@ -516,6 +552,22 @@
                     throw new Error('Name must be 100 characters or less');
                 }
                 updates.fullname = newFullname;
+            } else if (currentEditMode === 'location') {
+                const newLocation = document.getElementById('newLocation').value.trim();
+                
+                // Save location using siteLanguageManager
+                if (window.siteLanguageManager) {
+                    if (newLocation) {
+                        window.siteLanguageManager.setLocation(newLocation);
+                        // Trigger language recalculation
+                        window.siteLanguageManager.recalculateLanguage();
+                    } else {
+                        window.siteLanguageManager.clearLocation();
+                    }
+                }
+                
+                // Also update in user profile as custom field if backend supports it
+                updates.location = newLocation;
             } else if (currentEditMode === 'password') {
                 const oldPassword = document.getElementById('oldPassword').value;
                 const newPassword = document.getElementById('newPassword').value;
@@ -532,7 +584,9 @@
                 updates.passwordConfirm = newPassword;
             }
 
-            await userAuth.updateProfile(user.id, updates);
+            if (Object.keys(updates).length > 0 && currentEditMode !== 'location') {
+                await userAuth.updateProfile(user.id, updates);
+            }
             
             // Reload user info
             const updated = userAuth.getCurrentUser();

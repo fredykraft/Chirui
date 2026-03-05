@@ -1,4 +1,17 @@
 <head>
+  <!-- SECURITY: Configure PocketBase URL before other scripts load -->
+  <script>
+    (function() {
+      'use strict';
+      // Set PocketBase URL from environment - NEVER expose development URLs here
+      // This must be set before any auth/API scripts load
+      if (!window.POCKETBASE_URL) {
+        window.POCKETBASE_URL = 'https://chirui-huang.pockethost.io';
+      }
+      console.log('[Config] PocketBase configured');
+    })();
+  </script>
+  
   <meta charset='utf-8'>
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
   <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes'>
@@ -13,6 +26,8 @@
   <meta http-equiv='X-XSS-Protection' content='1; mode=block'>
   <meta name='referrer' content='strict-origin-when-cross-origin'>
   <meta http-equiv='Permissions-Policy' content='geolocation=(), microphone=(), camera=()'>
+  <!-- Content Security Policy -->
+  <meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline' translate.google.com translate-a.googleapis.com cdn.jsdelivr.net googletagmanager.com analytics.google.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://chirui-huang.pockethost.io; frame-src 'self' youtube.com www.youtube.com">
 
   <title>{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</title>
   <meta name='description' content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">

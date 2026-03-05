@@ -1,0 +1,45 @@
+# CODEOWNERS - Define code ownership and review requirements
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# These owners will be automatically requested for review when someone
+# opens a pull request that modifies the following files
+
+# ROOT/Configuration files - Security critical
+.env.example @cheerie
+.gitignore @cheerie
+Gemfile @cheerie
+_config.yml @cheerie
+_config_dev.yml @cheerie
+
+# Security-critical JavaScript files - Must be reviewed
+js/user-auth.js @cheerie
+js/pocketbase-config.js @cheerie
+js/pocketbase-integration.js @cheerie
+js/security.js @cheerie
+
+# HTML includes - Can affect all pages
+_includes/head.html @cheerie
+_includes/header.html @cheerie
+_includes/footer.html @cheerie
+
+# Layouts - Affect page structure
+_layouts/ @cheerie
+
+# Security documentation - Requires accuracy
+WEBSITE_SECURITY.md @cheerie
+DEPLOYMENT_SECURITY_CHECKLIST.md @cheerie
+PUBLIC_DEPLOYMENT_GUIDE.md @cheerie
+SECURITY_UPDATE_SUMMARY.md @cheerie
+REPOSITORY_SECURITY.md @cheerie
+SECURITY_PRIVACY.md @cheerie
+SECURITY_SETUP.md @cheerie
+
+# GitHub actions and workflows
+.github/ @cheerie
+
+# Other important files
+README.md @cheerie
+LICENSE @cheerie
+
+# Default owner for everything else (optional)
+* @cheerie

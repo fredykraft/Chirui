@@ -3,26 +3,60 @@ _site/
 .sass-cache/
 .jekyll-cache/
 .jekyll-metadata
-_config_dev.yml
 
-# Sensitive files - DO NOT COMMIT
+# ========================================
+# SECURITY: SENSITIVE FILES - DO NOT COMMIT
+# ========================================
+
+# Admin credentials (template is safe, actual file is not)
 ADMIN_PASSWORD.md
-ADMIN_ANALYTICS_GUIDE.md
-admin-analytics.html
+
+# Development/local configuration 
+_config_dev.yml
 _config.local.yml
-SECURITY_SETUP.md
-SECURITY_ACTION_REQUIRED.md
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+
+# Sensitive personal/guide files (keep templates only)
+ADMIN_ANALYTICS_GUIDE.md
 COOKIE_TRACKING_GUIDE.md
 
-# Personal/sensitive documents
-*.local.*
-*.secret.*
-
-# PocketBase - Executable and data are private
+# PocketBase local data (migrations are safe to commit)
 pocketbase
 pb_data/
 pocketbase.log
 nohup.out
 
-# PocketBase migrations are safe to commit (schema only, no data)
-# pb_migrations/ files can be committed to track database schema changes
+# Development/sensitive files
+*.local.*
+*.secret.*
+*.pem
+*.key
+*.p8
+*.p12
+*.swp
+*.swo
+*~
+
+# IDE files (if applicable)
+.vscode/settings.json
+.idea/
+
+# OS files
+Thumbs.db
+
+# ========================================
+# OK TO COMMIT
+# ========================================
+# These files are safe and should be tracked:
+# - pb_migrations/ (database schema changes)
+# - SECURITY_SETUP.md (public security guide)
+# - SECURITY_ACTION_REQUIRED.md (public documentation)
+# - WEBSITE_SECURITY.md (public documentation)
+# - DEPLOYMENT_SECURITY_CHECKLIST.md (reference guide)
+# - PUBLIC_DEPLOYMENT_GUIDE.md (reference guide)
+# - All .md.template files (templates for sensitive docs)
+

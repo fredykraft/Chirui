@@ -1,0 +1,48 @@
+name: CodeQL Security Analysis
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run analysis at 2 AM UTC daily
+    - cron: '0 2 * * *'
+
+jobs:
+  analyze:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    
+    permissions:
+      # Required for CodeQL to upload results
+      security-events: write
+      
+    strategy:
+      fail-fast: false
+      matrix:
+        # CodeQL supports analysis for multiple languages
+        language: [ 'python', 'javascript' ]
+        
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full commit history for better analysis
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}
+          # Learn more about CodeQL language support:
+          # https://codeql.github.com/docs/codeql-overview/supported-languages-and-frameworks/
+
+      - name: Build (JavaScript)
+        if: matrix.language == 'javascript'
+        run: |
+          echo "JavaScript static analysis - no build needed for Jekyll"
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: /language:${{ matrix.language }}

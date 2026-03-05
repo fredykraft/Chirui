@@ -1,0 +1,55 @@
+# .gitattributes - Git attribute definitions for repository
+
+# Auto detect text files and normalize line endings to LF
+* text=auto
+
+# Sensitive files - should never be committed
+ADMIN_PASSWORD.md export-ignore diff=nodiff merge=ours
+.env diff=nodiff merge=ours
+.env.*.local diff=nodiff merge=ours
+*.secret* diff=nodiff merge=ours
+
+# Shell scripts - keep Unix line endings
+*.sh text eol=lf
+*.bash text eol=lf
+
+# JavaScript - normalize to LF
+*.js text eol=lf
+*.json text eol=lf
+
+# HTML/templates - normalize to LF
+*.html text eol=lf
+*.liquid text eol=lf
+*.md text eol=lf
+
+# CSS/SCSS - normalize to LF
+*.css text eol=lf
+*.scss text eol=lf
+
+# YAML configuration
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Documentation
+*.md text eol=lf diff=markdown
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.mov binary
+*.mp4 binary
+*.mp3 binary
+*.gz binary
+*.zip binary
+*.7z binary
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+
+# Lock files
+Gemfile.lock text eol=lf
+package-lock.json text eol=lf

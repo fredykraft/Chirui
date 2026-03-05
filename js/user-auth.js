@@ -5,8 +5,14 @@
 
 class UserAuth {
   constructor(baseUrl) {
-    // Use provided baseUrl, or window.POCKETBASE_URL, or fallback to localhost
-    this.baseUrl = baseUrl || window.POCKETBASE_URL || 'http://127.0.0.1:8090';
+    // Use provided baseUrl, or window.POCKETBASE_URL
+    // SECURITY: No fallback to localhost in production code
+    this.baseUrl = baseUrl || window.POCKETBASE_URL;
+    
+    if (!this.baseUrl) {
+      console.error('[Auth] Error: PocketBase URL not configured. Authentication will not work.');
+    }
+    
     this.authToken = this.getStoredToken();
     this.currentUser = this.getStoredUser();
   }

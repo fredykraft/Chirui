@@ -4,17 +4,74 @@
   var DEFAULT_LANGUAGE = 'en';
   var RELOAD_FLAG_KEY = 'auto_lang_reload_done';
   var OVERRIDE_KEY = 'site_lang_override';
+  var LOCATION_KEY = 'user_location';
   var SUPPORTED_LANGUAGES = [
     'ar', 'de', 'es', 'fr', 'hi', 'it', 'ja', 'ko', 'pt', 'ru', 'zh-CN', 'zh-TW'
   ];
+
+  // Map locations to languages
+  var LOCATION_LANGUAGE_MAP = {
+    'shanghai': 'zh-CN',
+    'beijing': 'zh-CN',
+    'shenzhen': 'zh-CN',
+    'guangzhou': 'zh-CN',
+    'chengdu': 'zh-CN',
+    'hangzhou': 'zh-CN',
+    'nanjing': 'zh-CN',
+    'wuhan': 'zh-CN',
+    'chongqing': 'zh-CN',
+    'xi\'an': 'zh-CN',
+    'xian': 'zh-CN',
+    'harbin': 'zh-CN',
+    'dalian': 'zh-CN',
+    'qingdao': 'zh-CN',
+    'changsha': 'zh-CN',
+    'jinan': 'zh-CN',
+    'taiyuan': 'zh-CN',
+    'shenyang': 'zh-CN',
+    'lanzhou': 'zh-CN',
+    'guiyang': 'zh-CN',
+    'yunnan': 'zh-CN',
+    'tianjin': 'zh-CN',
+    'suzhou': 'zh-CN',
+    'ningbo': 'zh-CN',
+    'xiamen': 'zh-CN',
+    'fuzhou': 'zh-CN',
+    'nanchang': 'zh-CN',
+    'changchun': 'zh-CN',
+    'jilin': 'zh-CN',
+    'hefei': 'zh-CN',
+    'zhengzhou': 'zh-CN',
+    'taibei': 'zh-TW',
+    'taipei': 'zh-TW',
+    'kaohsiung': 'zh-TW',
+    'tainan': 'zh-TW',
+    'gaoxiong': 'zh-TW',
+    'hongkong': 'zh-TW',
+    'hong kong': 'zh-TW',
+    'macau': 'zh-TW',
+    'macao': 'zh-TW'
+  };
 
   function normalizeLanguageTag(languageTag) {
     if (!languageTag) return DEFAULT_LANGUAGE;
 
     var lower = String(languageTag).toLowerCase();
-    // Handle Chinese variants - all mainland/default variants map to zh-CN (Simplified)
-    if (lower === 'zh' || lower === 'zh-cn' || lower === 'zh-hans' || lower.indexOf('zh-') === 0) {
-      if (lower === 'zh-tw' || lower === 'zh-hant' || lower === 'zh-yue') return 'zh-TW';
+    
+    // Handle Chinese variants
+    // Check for Traditional Chinese first (more specific)
+    if (lower === 'zh-tw' || lower === 'zh-hant' || lower === 'zh-yue' || lower === 'zh-hk' || lower === 'zh-mo') {
+      return 'zh-TW';
+    }
+    
+    // Then check for Simplified Chinese (mainland and default)
+    if (lower === 'zh' || lower === 'zh-cn' || lower === 'zh-hans' || lower === 'zh-sg' || 
+        (lower.indexOf('zh-') === 0 && LOCATION_LANGUAGE_MAP[lower.replace('zh-', '')] !== 'zh-TW')) {
+      return 'zh-CN';
+    }
+    
+    // For any other 'zh-*' variant, default to Simplified Chinese
+    if (lower.indexOf('zh') === 0) {
       return 'zh-CN';
     }
 
@@ -33,14 +90,41 @@
       languages = [navigator.language];
     }
 
+    console.log('[Language Detection] Browser language settings:', languages);
+
     for (var i = 0; i < languages.length; i += 1) {
       var normalized = normalizeLanguageTag(languages[i]);
-      if (normalized !== DEFAULT_LANGUAGE || languages[i].toLowerCase().indexOf('en') !== 0) {
+      console.log('[Language Detection] Processing:', languages[i], '-> Normalized:', normalized);
+      
+      // Return immediately if we find a supported non-default language
+      if (normalized !== DEFAULT_LANGUAGE) {
+        console.log('[Language Detection] Found non-default language:', normalized);
         return normalized;
       }
     }
 
+    console.log('[Language Detection] No non-default language found, using default:', DEFAULT_LANGUAGE);
     return DEFAULT_LANGUAGE;
+  }
+
+  function getLanguageByLocation(location) {
+    if (!location) return null;
+
+    var lower = String(location).toLowerCase().trim();
+    
+    // Direct match
+    if (LOCATION_LANGUAGE_MAP[lower]) {
+      return LOCATION_LANGUAGE_MAP[lower];
+    }
+
+    // Partial match (check if location contains any mapped city)
+    for (var city in LOCATION_LANGUAGE_MAP) {
+      if (lower.indexOf(city) !== -1) {
+        return LOCATION_LANGUAGE_MAP[city];
+      }
+    }
+
+    return null;
   }
 
   function getCookieValue(name) {
@@ -61,6 +145,7 @@
     var query = new URLSearchParams(window.location.search);
     var queryOverride = query.get('lang');
 
+    // Priority 1: URL query parameter (highest priority - explicit user choice)
     if (queryOverride) {
       var queryLang = normalizeLanguageTag(queryOverride);
       try {
@@ -70,6 +155,7 @@
       return queryLang;
     }
 
+    // Priority 2: localStorage override (user's saved preference)
     try {
       var saved = localStorage.getItem(OVERRIDE_KEY);
       if (saved) {
@@ -78,6 +164,19 @@
     } catch (error) {
     }
 
+    // Priority 3: Location-based detection
+    try {
+      var location = localStorage.getItem(LOCATION_KEY);
+      if (location) {
+        var locationLang = getLanguageByLocation(location);
+        if (locationLang) {
+          return locationLang;
+        }
+      }
+    } catch (error) {
+    }
+
+    // Priority 4: System language detection (fallback)
     return detectSystemLanguage();
   }
 
@@ -162,4 +261,122 @@
   } else {
     sessionStorage.removeItem(RELOAD_FLAG_KEY);
   }
+
+  // Export global functions for managing location and language
+  window.siteLanguageManager = {
+    setLocation: function(location) {
+      try {
+        localStorage.setItem(LOCATION_KEY, location);
+        console.log('[Language Manager] Location set to:', location);
+        return true;
+      } catch (error) {
+        console.error('[Language Manager] Error setting location:', error);
+        return false;
+      }
+    },
+
+    getLocation: function() {
+      try {
+        return localStorage.getItem(LOCATION_KEY);
+      } catch (error) {
+        return null;
+      }
+    },
+
+    clearLocation: function() {
+      try {
+        localStorage.removeItem(LOCATION_KEY);
+        console.log('[Language Manager] Location cleared');
+        return true;
+      } catch (error) {
+        console.error('[Language Manager] Error clearing location:', error);
+        return false;
+      }
+    },
+
+    setLanguage: function(language) {
+      var normalized = normalizeLanguageTag(language);
+      try {
+        localStorage.setItem(OVERRIDE_KEY, normalized);
+        console.log('[Language Manager] Language set to:', normalized);
+      } catch (error) {
+        console.error('[Language Manager] Error setting language:', error);
+        return false;
+      }
+
+      // Apply the language change
+      document.documentElement.lang = normalized;
+      setTranslateCookie(normalized);
+      
+      // Try to update Google Translate widget
+      var select = document.querySelector('.goog-te-combo');
+      if (select) {
+        select.value = normalized;
+        select.dispatchEvent(new Event('change'));
+      } else {
+        // Reload if translator isn't ready yet
+        setTimeout(function() {
+          window.location.reload();
+        }, 500);
+      }
+      return true;
+    },
+
+    getLanguage: function() {
+      try {
+        return localStorage.getItem(OVERRIDE_KEY) || targetLanguage;
+      } catch (error) {
+        return targetLanguage;
+      }
+    },
+
+    clearLanguage: function() {
+      try {
+        localStorage.removeItem(OVERRIDE_KEY);
+        sessionStorage.removeItem(RELOAD_FLAG_KEY);
+        console.log('[Language Manager] Language preference cleared');
+        return true;
+      } catch (error) {
+        console.error('[Language Manager] Error clearing language:', error);
+        return false;
+      }
+    },
+
+    recalculateLanguage: function() {
+      var newLanguage = getTargetLanguage();
+      if (newLanguage !== targetLanguage) {
+        targetLanguage = newLanguage;
+        document.documentElement.lang = newLanguage;
+        setTranslateCookie(newLanguage);
+        
+        var select = document.querySelector('.goog-te-combo');
+        if (select) {
+          select.value = newLanguage;
+          select.dispatchEvent(new Event('change'));
+        } else {
+          window.location.reload();
+        }
+        console.log('[Language Manager] Language recalculated to:', newLanguage);
+        return true;
+      }
+      return false;
+    },
+
+    getSupportedLanguages: function() {
+      return SUPPORTED_LANGUAGES.slice();
+    },
+
+    getCitiesForLanguage: function(language) {
+      var normalized = normalizeLanguageTag(language);
+      var cities = [];
+      for (var city in LOCATION_LANGUAGE_MAP) {
+        if (LOCATION_LANGUAGE_MAP[city] === normalized) {
+          cities.push(city);
+        }
+      }
+      return cities;
+    }
+  };
+
+  console.log('[Language Manager] Initialized. Current language:', targetLanguage);
 })();

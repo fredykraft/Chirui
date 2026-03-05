@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Language Adapter Debug</title>
+  <style>
+    body {
+      font-family: monospace;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .debug-box {
+      background: white;
+      border: 2px solid #333;
+      padding: 20px;
+      margin: 10px 0;
+      border-radius: 4px;
+    }
+    .label {
+      font-weight: bold;
+      color: #333;
+    }
+    .value {
+      color: #007acc;
+      margin: 5px 0;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      background: #007acc;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #005a9e;
+    }
+  </style>
+</head>
+<body>
+<h1>🔍 Language Adapter Debug</h1>
+
+<div class="debug-box">
+  <p class="label">Browser Language Settings:</p>
+  <p class="value">navigator.language: <span id="nav-lang"></span></p>
+  <p class="value">navigator.languages: <span id="nav-langs"></span></p>
+</div>
+
+<div class="debug-box">
+  <p class="label">Script Detection:</p>
+  <p class="value">Detected Language: <span id="detected-lang">checking...</span></p>
+  <p class="value">Document Lang Attribute: <span id="doc-lang">-</span></p>
+</div>
+
+<div class="debug-box">
+  <p class="label">Google Translate Cookies:</p>
+  <p class="value">googtrans cookie: <span id="cookie-value">none</span></p>
+  <p class="value">localStorage override: <span id="local-override">none</span></p>
+</div>
+
+<div class="debug-box">
+  <p class="label">Google Translate Widget:</p>
+  <p class="value">Widget found: <span id="widget-found">checking...</span></p>
+  <p class="value">Widget value: <span id="widget-value">-</span></p>
+</div>
+
+<div class="debug-box">
+  <button onclick="testLanguage('es')">Test Spanish (?lang=es)</button>
+  <button onclick="testLanguage('zh')">Test Chinese (?lang=zh)</button>
+  <button onclick="testLanguage('ja')">Test Japanese (?lang=ja)</button>
+  <button onclick="clearAllAndReload()">Clear All & Reload</button>
+</div>
+
+<script>
+function getCookieValue(name) {
+  var prefix = name + '=';
+  var parts = document.cookie ? document.cookie.split(';') : [];
+  for (var i = 0; i < parts.length; i += 1) {
+    var part = parts[i].trim();
+    if (part.indexOf(prefix) === 0) {
+      return part.substring(prefix.length);
+    }
+  }
+  return '';
+}
+
+function updateDebugInfo() {
+  document.getElementById('nav-lang').innerText = navigator.language || 'undefined';
+  document.getElementById('nav-langs').innerText = (navigator.languages || []).join(', ') || 'undefined';
+  document.getElementById('doc-lang').innerText = document.documentElement.lang || '(not set)';
+  document.getElementById('cookie-value').innerText = getCookieValue('googtrans') || '(not set)';
+  
+  try {
+    var override = localStorage.getItem('site_lang_override');
+    document.getElementById('local-override').innerText = override || '(not set)';
+  } catch (e) {
+    document.getElementById('local-override').innerText = '(error: ' + e.message + ')';
+  }
+
+  var widget = document.querySelector('.goog-te-combo');
+  if (widget) {
+    document.getElementById('widget-found').innerText = '✅ YES';
+    document.getElementById('widget-value').innerText = widget.value || '(empty)';
+  } else {
+    document.getElementById('widget-found').innerText = '❌ Not found';
+  }
+}
+
+function testLanguage(lang) {
+  window.location.href = window.location.pathname + '?lang=' + lang;
+}
+
+function clearAllAndReload() {
+  document.cookie = 'googtrans=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
+  localStorage.removeItem('site_lang_override');
+  sessionStorage.removeItem('auto_lang_reload_done');
+  window.location.href = window.location.pathname;
+}
+
+// Update immediately
+updateDebugInfo();
+
+// Update every 2 seconds
+setInterval(updateDebugInfo, 2000);
+</script>
+</body>
+</html>
