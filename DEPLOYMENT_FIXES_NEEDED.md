@@ -8,7 +8,7 @@ Your contact form, newsletter, and comments use PocketBase at `http://127.0.0.1:
 **GitHub Pages (your public website) CANNOT connect to localhost** because:
 - GitHub Pages serves static files from GitHub's servers
 - Your PocketBase runs on YOUR computer
-- Visitors to fredykraft.github.io/Chirui/ cannot access YOUR localhost
+- Visitors to optmo.org/ cannot access YOUR localhost
 
 ### The Solution (Choose One)
 
@@ -94,12 +94,12 @@ The search feature may be failing to load `/Chirui/search.json` on GitHub Pages.
 ### Troubleshooting Steps
 
 1. **Verify search.json exists on GitHub Pages:**
-   - Visit: https://fredykraft.github.io/Chirui/search.json
+   - Visit: https://optmo.org/search.json
    - Should show JSON with your pages/posts
    - If you see 404, the file isn't deploying
 
 2. **Check browser console for errors:**
-   - Open your website: https://fredykraft.github.io/Chirui/
+   - Open your website: https://optmo.org/
    - Press F12 to open Developer Tools
    - Click "Console" tab
    - Try typing in search box
@@ -156,11 +156,11 @@ Before deploying, test locally:
 4. **Update URLs** in `pocketbase-integration.js` and `user-auth.js`
 5. **Test forms** on local site first
 6. **Commit and push** changes to GitHub
-7. **Test on public site**: https://fredykraft.github.io/Chirui/
+7. **Test on public site**: https://optmo.org/
 
 ### For Search (Should already work):
 
-1. **Test on GitHub Pages**: https://fredykraft.github.io/Chirui/
+1. **Test on public site**: https://optmo.org/
 2. **Open browser console** (F12) and try searching
 3. **If you see errors**, share them - I'll help fix
 4. **If search.json returns 404**, rebuild and redeploy
@@ -175,7 +175,7 @@ Before deploying, test locally:
 - Search: ✅ Should work
 - User Auth: ✅ Works (localhost PocketBase)
 
-❌ **Public Website (fredykraft.github.io/Chirui/)**
+❌ **Public Website (optmo.org/)**
 - PocketBase: ❌ Not accessible (localhost only)
 - Forms: ❌ Cannot submit (no backend)
 - Search: ⚠️ Need to verify
@@ -191,7 +191,7 @@ Before deploying, test locally:
 3. I'll guide you through the setup
 
 **For Search Issues:**
-1. Visit: https://fredykraft.github.io/Chirui/search.json
+1. Visit: https://optmo.org/search.json
 2. Tell me if you see JSON or a 404 error
 3. Open your site and press F12, check the Console tab
 4. Try searching and share any red error messages

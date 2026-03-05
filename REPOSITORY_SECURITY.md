@@ -32,9 +32,9 @@ These files are included in the repository and contain NO sensitive data:
 These files are in `.gitignore` and contain sensitive information:
 
 ### Authentication & Passwords
-- `ADMIN_PASSWORD.md` - Contains your actual admin password
-- `admin-analytics.html` - Contains password hash
-- `ADMIN_ANALYTICS_GUIDE.md` - Contains your actual password
+- `ADMIN_PASSWORD.md` - Local private notes (never commit)
+- `admin-analytics.html` - Local-only admin page if you keep password checks client-side
+- `ADMIN_ANALYTICS_GUIDE.md` - Local private notes (never commit)
 
 ### PocketBase Files
 - `pocketbase` - The executable binary
@@ -84,7 +84,7 @@ git check-ignore -v admin-analytics.html ADMIN_PASSWORD.md pb_data/ pocketbase
 2. **Passwords:**
    - Never hardcode passwords in committed files
    - Use template files with placeholders
-   - Keep actual passwords in `.md` files that are gitignored
+   - Store real credentials in a password manager (not in repository files)
 
 3. **Database:**
    - Never commit `pb_data/` folder

@@ -4,7 +4,7 @@ This guide will help you deploy your PocketBase backend to PocketHost so your fo
 
 ## Why Deploy PocketBase?
 
-Your forms currently use `http://127.0.0.1:8090` (localhost), which **only works on your computer**. To make forms work on your public website at `https://fredykraft.github.io/Chirui/`, you need to deploy PocketBase to a cloud service.
+Your forms currently use `http://127.0.0.1:8090` (localhost), which **only works on your computer**. To make forms work on your public website at `https://optmo.org/`, you need to deploy PocketBase to a cloud service.
 
 ---
 
@@ -101,7 +101,7 @@ git push origin main
 ### Step 9: Test Your Forms
 
 1. Wait 1-2 minutes for GitHub Pages to rebuild
-2. Visit: **https://fredykraft.github.io/Chirui/**
+2. Visit: **https://optmo.org/**
 3. Try submitting:
    - Contact form
    - Newsletter subscription
