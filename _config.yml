@@ -1,7 +1,7 @@
 title: Chirui Huang
 description: Personal website of Chirui Huang
-baseurl: "/Chirui" # the subpath of your site, e.g. /blog
-url: "https://fredykraft.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://chirui.online" # the base hostname & protocol for your site, e.g. http://example.com
 
 # Author
 author-name:    Chirui Huang
