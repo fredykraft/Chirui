@@ -2,6 +2,9 @@
 
 This directory contains GitHub-specific configuration and documentation for repository security, workflows, and policies.
 
+For the main project overview, setup guide, and support links, see the root README:
+- [../README.md](../README.md)
+
 ## 📁 Contents Overview
 
 ### 🔐 Security Configuration Files
@@ -332,5 +335,5 @@ Outside this directory:
 
 ---
 
-**Last Updated**: 2024  
-**Version**: 1.0
+**Last Updated**: March 6, 2026  
+**Version**: 1.1
