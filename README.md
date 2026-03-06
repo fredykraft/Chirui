@@ -4,7 +4,7 @@ Personal website built with Jekyll and hosted on GitHub Pages.
 
 ## Live Site
 
-- Public URL: https://fredykraft.github.io/Chirui/
+- Public URL: https://chirui.online
 
 ## Local Development
 
@@ -74,8 +74,8 @@ Edit site-wide settings in `_config.yml`:
 
 - `title`
 - `description`
-- `url`
-- `baseurl` (currently `/Chirui` for GitHub Pages project site)
+- `url` (set to `https://chirui.online`)
+- `baseurl` (empty for custom domain)
 - social links and author fields
 
 For local development overrides, use `_config_dev.yml` together with `_config.yml`.
