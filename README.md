@@ -123,11 +123,31 @@ bundle exec jekyll serve --port 4001 --config _config.yml,_config_dev.yml
 2. Restart Jekyll server
 3. Confirm you edited files in this repo path: `/Users/cheerie/Documents/GitHub/Chirui`
 
-## Donate
+## Support My Work
 
-If you’d like to support my work, you can donate via:
+If you'd like to support my work and help me continue creating content, you can:
 
-- PayPal: `chiruihuang079@gmail.com`
+- 💜 **GitHub Sponsors**: [Sponsor @fredykraft](https://github.com/sponsors/fredykraft)
+- 💳 **PayPal**: [paypal.me/chiruihuang079](https://www.paypal.me/chiruihuang079) or `chiruihuang079@gmail.com`
+
+Your support helps me dedicate more time to research, content creation, and open-source projects!
+
+## Collaborate With Me
+
+I'm always open to collaboration opportunities! Whether you're interested in:
+
+- 🤝 Research partnerships
+- 🎙️ Podcast interviews or guest appearances
+- 🎥 Video collaborations
+- 💻 Open-source contributions
+- 📝 Co-authoring articles or papers
+- 🎤 Speaking engagements
+
+Feel free to reach out:
+
+- **Email**: Fredykraft7@gmail.com
+- **LinkedIn**: [linkedin.com/in/chirui-h-595ba6270](https://www.linkedin.com/in/chirui-h-595ba6270)
+- **GitHub Issues**: Open an issue in this repository for collaboration ideas
 
 ## Security Notes
 
