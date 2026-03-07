@@ -26,52 +26,32 @@ This is my personal website built with **Jekyll** and hosted on **GitHub Pages**
 ### 📄 Pages Included
 - **🏠 Home** - First impression with featured updates
 - **👤 About** - My background and interests
-- **📚 Research** - Academic work and projects
-- **🎙️ Podcasts** - Audio content
-- **🎥 Videos** - Video gallery
 - **🛠️ Tools** - Useful resources and lab
 
 ### 🎨 Features
 ✅ Beautiful, modern design  
 ✅ Works on phone, tablet, and desktop  
 ✅ Dark mode support  
-✅ Search functionality  
-✅ Visitor comment section (Guest Book)  
-✅ Connected social media links  
 
----
-
-## 🚀 How to Use
 
 ### For Visitors
 Simply visit **[chirui.online](https://chirui.online)** to explore!
-
-### For Developers (Want to Copy This?)
-
 **Step 1: Get Setup**
-```bash
 # Make sure you have Ruby installed
 ruby --version
 
 # Install Bundler (package manager for Ruby)
 gem install bundler
-```
 
 **Step 2: Clone & Install**
-```bash
 git clone https://github.com/Chirui-Huang/Chirui.git
 cd Chirui
-bundle install
-```
-
 **Step 3: Run Locally**
-```bash
 bundle exec jekyll serve --config _config.yml,_config_dev.yml
 ```
 
 **Step 4: Open Browser**
 Go to: `http://localhost:4000`
-
 You should see the website running locally!
 
 ---
