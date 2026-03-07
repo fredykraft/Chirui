@@ -6,9 +6,30 @@
 
 > ⏰ Last Updated: March 6, 2026
 
+
+## 🤝 Let's Collaborate!
+
+I'm always interested in working together!
+
+### What I'm Looking For
+- **👥 Research Partners** - Academic collaborations, co-authoring
+- **🎬 Content Creators** - Podcast interviews, video collabs
+- **💻 Developers** - Open-source projects, code contributions
+
+### Get in Touch
+
+📧 **Email:** [chiruihuang079@gmail.com](mailto:chiruihuang079@gmail.com)
+
+📱 **Connect:**
+- LinkedIn: [Chirui Huang](https://www.linkedin.com/in/chirui-h-595ba6270)
+- GitHub: [@Chirui-Huang](https://github.com/Chirui-Huang)
+- Website: [chirui.online](https://chirui.online)
+- YouTube: [Chirui-Huang](https://www.youtube.com/@Chirui-Huang)
+- Bilibili: [Chirui Huang](https://space.bilibili.com/3690992339258133)
+
 ---
 
-## 🎯 What is This?
+## 📚 Built With
 
 This is my personal website built with **Jekyll** and hosted on **GitHub Pages**. It's a clean, modern platform where I share:
 
