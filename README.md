@@ -48,15 +48,10 @@ git clone https://github.com/Chirui-Huang/Chirui.git
 cd Chirui
 **Step 3: Run Locally**
 bundle exec jekyll serve --config _config.yml,_config_dev.yml
-```
 
 **Step 4: Open Browser**
 Go to: `http://localhost:4000`
-You should see the website running locally!
 
----
-
-## 📁 Project Structure
 
 ```
 Chirui Website/
